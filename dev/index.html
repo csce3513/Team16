@@ -19,6 +19,7 @@
 		//Create the Game Variable
 	    	var maingame;
 			var numberOfLives;
+			var map;
 		window.addEventListener('load', loadResources, false);
 		
 		
@@ -27,28 +28,28 @@
 		    // This initializes Akihabara with the default settings.
 		    // The title (which appears in the browser title bar) is the text we're passing to the function.
 		    help.akihabaraInit('Arkansas Rumble');
-		   
-		    // Here we tell the game to look for an image called 'font.png' in the same directory as the HTML file and call it 'font' internally
-		    gbox.addImage('font', 'resources/font.png');
-		   
+		    gbox.addBundle({file:"resources/bundle.js"}); // Audio, sprites, fonts etc. are loaded here now.
+		    
+			// Here we tell the game to look for an image called 'font.png' in the same directory as the HTML file and call it 'font' internally
+		    //gbox.addImage('font', 'resources/font.png');		   
 		    // Same thing for our logo here.
-		    gbox.addImage('logo', 'resources/logo.png');
-			
+		    //gbox.addImage('logo', 'resources/logo.png');			
 			// Add player sprite
-			gbox.addImage('player_sprite', 'resources/player_sprite.png');
+			//gbox.addImage('player_sprite', 'resources/player_sprite.png');
+			
 			// Add player tiles
-			gbox.addTiles({
-				id:      'player_tiles', // set a unique ID for future reference
-				image:   'player_sprite', // Use the 'sprites' image, as loaded above
-				tileh:   40,
-				tilew:   20,
-				tilerow: 1,
-				gapx:    0,
-				gapy:    0
-			});
+			//gbox.addTiles({
+			//	id:      'player_tiles', // set a unique ID for future reference
+			//	image:   'player_sprite', // Use the 'sprites' image, as loaded above
+			//	tileh:   40,
+			//	tilew:   20,
+			//	tilerow: 1,
+			//	gapx:    0,
+			//	gapy:    0
+			//});
 		   
 		    // Fonts are mapped over an image, setting the first letter, the letter size, the length of all rows of letters and a horizontal/vertical gap.
-		    gbox.addFont({ id: 'small', image: 'font', firstletter: ' ', tileh: 8, tilew: 8, tilerow: 255, gapx: 0, gapy: 0 });
+		    //gbox.addFont({ id: 'small', image: 'font', firstletter: ' ', tileh: 8, tilew: 8, tilerow: 255, gapx: 0, gapy: 0 });
 		   
 		    // When everything is ready, the 'loadAll' downloads all the needed resources, and then calls the function "main".
 		    gbox.loadAll(main);
@@ -57,7 +58,7 @@
 		
 		function main()
 		{
-		    gbox.setGroups(['player','game']);
+		    gbox.setGroups(['background','player','game']);
 		    maingame = gamecycle.createMaingame('game', 'game');
 		   
 		    maingame.gameTitleIntroAnimation=function(reset)
@@ -92,36 +93,91 @@
 
 			maingame.initializeGame = function() {
 				addPlayer();
+				addMap();
 				numberOfLives = helpers.getNumberOfLives((maingame.difficulty));
 			};
 			
+			map = {
+				tileset: 'tiles',
+				map: loadMap(),
+				tileIsSolid: function(obj, t) {
+					return t !=null; // Wall is solid if not an empty space
+				}
+			};
+			map = help.finalizeTilemap(map);
+			
+			// New for Part 5, we create a 40x30 array to match our 40x30 tiles in the map.
+			pathMap = new Array(40);
+			for (i = 0; i < pathMap.length; i++)
+			  pathMap [i] = new Array(30);
+			  // For each element in the array, check and see if the corresponding tile is solid using our map's tileIsSolid function.
+			  //  The function will return 1 if the tile is solid, and 0 if it's empty space. We copy map(i,j) to pathMap(j,i) since there's something
+			  //  inverted in the A* pathfinding function and the present authors are too lazy to fix it. What we're creating is an array
+			  //  of 0's and 1's where each array element represent one tile and whether it's solid. This is what the pathfinding algorithm
+			  //  will use as its version of the level map.
+			  for(i = 0; i < map.map.length; i++)
+				for(j = 0; j < map.map[0].length; j++)
+				  pathMap[j][i] = map.tileIsSolid(map, map.map[i][j]);
+
+			gbox.createCanvas('map_canvas', {w: map.w, h: map.h });
+			gbox.blitTilemap(gbox.getCanvasContext('map_canvas'), map);
+			
 		    gbox.go();
 		}
-			
+		
+		function addMap()
+		{
+			gbox.addObject({
+                    id:     'background_id',
+                    group:  'background',
+                    blit:   function() {
+                                // Clear Screen
+                                gbox.blitFade(gbox.getBufferContext(), {alpha: 1});
+                                // Center the camera on the player object.
+                                //followCamera(gbox.getObject('player', 'player_id'), {w:map.w, h:map.h});
+                                gbox.blit(gbox.getBufferContext(), 
+                                    gbox.getCanvas('map_canvas'), {
+                                        dx: 0, 
+                                        dy:0, 
+                                        dw: gbox.getCanvas('map_canvas').width,
+                                        dh: gbox.getCanvas('map_canvas').height, 
+                                        sourcecamera: true });
+                        }
+                });
+		}
+		
+		function loadMap() {
+			return help.asciiArtToMap(getMap(),[[null,' '],[0,'x']]);
+		}
+		
 		function addPlayer() {
 			gbox.addObject({
 				id:'player_id',
 				group:'player',
 				tileset:'player_tiles',
-				
+				colh:gbox.getTiles('player_tiles').tileh,
 				initialize: function() {
 					// Here we're just telling it to initialize the object, in this case our player.
 				    toys.topview.initialize(this, {});
+					this.x = 20;
+					this.y = 20;
 				},
 				first:function(){
+					this.counter=(this.counter+1)%10;
 					// Toys.topview.controlKeys sets the main key controls. In this case we want to use the arrow keys which
-					//  are mapped to their english names. Inside this function it applies acceleration values to each of these directions
-					toys.topview.controlKeys(this, { left: 'left', right: 'right', up: 'up', down: 'down' });
- 
-					// This adds some friction to our accelerations so we stop when we're not accelerating, otherwise our game would control like Asteroids
-					toys.topview.handleAccellerations(this);
-					 
-					// This tells the physics engine to apply those forces
-					toys.topview.applyForces(this);
+					//  are mapped to their english names. Inside this function it applies acceleration values to each of these directions					
+ 					toys.platformer.applyGravity(this); // Apply gravity
+					toys.platformer.horizontalKeys(this,{left:"left",right:"right"}); // Moves horizontally
+					//toys.platformer.verticalTileCollision(this,map,"map"); // vertical tile collision (i.e. floor)
+					//toys.platformer.horizontalTileCollision(this,map,"map"); // horizontal tile collision (i.e. walls)
+					toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump"}); // handle jumping
+					toys.topview.tileCollision(this,map,'map',null, {tolerance:6, approximation:3});
+					toys.platformer.handleAccellerations(this); // gravity/attrito
+					
+					//toys.platformer.setSide(this); // set horizontal side
+					//toys.platformer.setFrame(this); // set the right animation frame
 				},
-				blit:function(){
-					// Clear the screen.
-					gbox.blitFade(gbox.getBufferContext(),{}); 
+				blit:function(){ 
 					// Render the current sprite.. don't worry too much about what's going on here. We're pretty much doing
 					//  the default drawing function, sending along the tileset, the frame info, coordinates, whether the
 					//  spries is flipped, camera info, and the alpha transparency value
@@ -138,6 +194,39 @@
 				}		
 			});
 		}
+	
+function getMap(){
+    var map1 = ["x      xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+                "x                  xx                  x",
+                "x                  xx                  x",
+                "x             x    xx                  x",
+                "x                  xxxxxxxxxx          x",
+                "x                                      x",
+                "x                                      x",
+                "x    xxxx   xxxxxxxxx           xxxxxxx ",
+                "x                  xx                  x",
+                "x                  xx                  x",
+                "xxxx               xx                  x",
+                "x      xxxxxxxxx   xx                  x",
+                "x                  xx                  x",
+                "x                  xx                  x",
+                "xxxxxxx  xxxxxxxxxxxx                  x",
+                "xxxxxxx  xxxxxxxxxxxx                  x",
+                "x                  xx         xxxx     x",
+                "x                  xx         x        x",
+                "xxxxxxxx      x    xx                  x",
+                "x             x    xx                  x",
+                "x             x    xx                  x",
+                "x             x    xx                  x",
+                "x        xxx xxxxxxxxx                 x",
+                "x                  xx                  x",
+                "xxxx                                   x",
+                "x                                      x",
+                "x                                      x",
+                "x                                      x",
+                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"];
+        return map1;
+}	
 	</script>
 </body>
 </html>
