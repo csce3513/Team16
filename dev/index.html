@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="akihabara/help.js"></script>
 	<script type="text/javascript" src="akihabara/tool.js"></script>
 	<script type="text/javascript" src="akihabara/gamecycle.js"></script>
+	<script type="text/javascript" src="resources/helpers.js"></script>
 	<style>BODY { -webkit-user-select:none; margin:0px}</style>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 </head>
@@ -17,6 +18,7 @@
 	<script>
 		//Create the Game Variable
 	    	var maingame;
+			var numberOfLives;
 		window.addEventListener('load', loadResources, false);
 		
 		
@@ -27,10 +29,23 @@
 		    help.akihabaraInit('Arkansas Rumble');
 		   
 		    // Here we tell the game to look for an image called 'font.png' in the same directory as the HTML file and call it 'font' internally
-		    gbox.addImage('font', 'font.png');
+		    gbox.addImage('font', 'resources/font.png');
 		   
 		    // Same thing for our logo here.
-		    gbox.addImage('logo', 'logo.png');
+		    gbox.addImage('logo', 'resources/logo.png');
+			
+			// Add player sprite
+			gbox.addImage('player_sprite', 'resources/player_sprite.png');
+			// Add player tiles
+			gbox.addTiles({
+				id:      'player_tiles', // set a unique ID for future reference
+				image:   'player_sprite', // Use the 'sprites' image, as loaded above
+				tileh:   40,
+				tilew:   20,
+				tilerow: 1,
+				gapx:    0,
+				gapy:    0
+			});
 		   
 		    // Fonts are mapped over an image, setting the first letter, the letter size, the length of all rows of letters and a horizontal/vertical gap.
 		    gbox.addFont({ id: 'small', image: 'font', firstletter: ' ', tileh: 8, tilew: 8, tilerow: 255, gapx: 0, gapy: 0 });
@@ -42,27 +57,27 @@
 		
 		function main()
 		{
-		    gbox.setGroups(['game']);
+		    gbox.setGroups(['player','game']);
 		    maingame = gamecycle.createMaingame('game', 'game');
 		   
 		    maingame.gameTitleIntroAnimation=function(reset)
 		    {
-			if (reset)
-			{
-			  toys.resetToy(this, 'rising');
-			}
+				if (reset)
+				{
+				  toys.resetToy(this, 'rising');
+				}
 		       
-			gbox.blitFade(gbox.getBufferContext(),{ alpha: 1 });
+				gbox.blitFade(gbox.getBufferContext(),{ alpha: 1 });
 		       
-			toys.logos.linear(this, 'rising', {
-			  image: 'logo',
-			  sx:    gbox.getScreenW()/2-gbox.getImage('logo').width/2,
-			  sy:    gbox.getScreenH(),
-			  x:     gbox.getScreenW()/2-gbox.getImage('logo').width/2,
-			  y:     20,
-			  speed: 1
-			});
-		    };
+				toys.logos.linear(this, 'rising', {
+				  image: 'logo',
+				  sx:    gbox.getScreenW()/2-gbox.getImage('logo').width/2,
+				  sy:    gbox.getScreenH(),
+				  x:     gbox.getScreenW()/2-gbox.getImage('logo').width/2,
+				  y:     20,
+				  speed: 1
+				});
+			};
 		   
 		   
 		   maingame.pressStartIntroAnimation=function(reset)
@@ -75,10 +90,54 @@
 		      }
 		  };
 
+			maingame.initializeGame = function() {
+				addPlayer();
+				numberOfLives = helpers.getNumberOfLives((maingame.difficulty));
+			};
+			
 		    gbox.go();
 		}
-				  
-		
+			
+		function addPlayer() {
+			gbox.addObject({
+				id:'player_id',
+				group:'player',
+				tileset:'player_tiles',
+				
+				initialize: function() {
+					// Here we're just telling it to initialize the object, in this case our player.
+				    toys.topview.initialize(this, {});
+				},
+				first:function(){
+					// Toys.topview.controlKeys sets the main key controls. In this case we want to use the arrow keys which
+					//  are mapped to their english names. Inside this function it applies acceleration values to each of these directions
+					toys.topview.controlKeys(this, { left: 'left', right: 'right', up: 'up', down: 'down' });
+ 
+					// This adds some friction to our accelerations so we stop when we're not accelerating, otherwise our game would control like Asteroids
+					toys.topview.handleAccellerations(this);
+					 
+					// This tells the physics engine to apply those forces
+					toys.topview.applyForces(this);
+				},
+				blit:function(){
+					// Clear the screen.
+					gbox.blitFade(gbox.getBufferContext(),{}); 
+					// Render the current sprite.. don't worry too much about what's going on here. We're pretty much doing
+					//  the default drawing function, sending along the tileset, the frame info, coordinates, whether the
+					//  spries is flipped, camera info, and the alpha transparency value
+					gbox.blitTile(gbox.getBufferContext(), {
+							tileset: this.tileset,
+							tile:    this.frame,
+							dx:      this.x,
+							dy:      this.y,
+							fliph:   this.fliph,
+							flipv:   this.flipv,
+							camera:  this.camera,
+							alpha:   1.0
+					});							
+				}		
+			});
+		}
 	</script>
 </body>
 </html>
