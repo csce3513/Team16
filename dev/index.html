@@ -17,9 +17,15 @@
 <body>
 	<script>
 		//Create the Game Variable
-	    	var maingame;
-			var numberOfLives;
-			var map;
+		var maingame;
+		var numberOfLives;
+		var dialogues={}; // Loaded by external resources. Must be global.
+		var tilemaps={}; // Loaded by external resources. Must be global.
+		var mapmeta={}; // Loaded by external resources. Must be global.
+		var mapobjects={}; // Loaded by external resources. Must be global.
+		var audioserver;
+		var currentstage; // The stage that is currently playing
+		
 		window.addEventListener('load', loadResources, false);
 		
 		
@@ -30,27 +36,6 @@
 		    help.akihabaraInit('Arkansas Rumble');
 		    gbox.addBundle({file:"resources/bundle.js"}); // Audio, sprites, fonts etc. are loaded here now.
 		    
-			// Here we tell the game to look for an image called 'font.png' in the same directory as the HTML file and call it 'font' internally
-		    //gbox.addImage('font', 'resources/font.png');		   
-		    // Same thing for our logo here.
-		    //gbox.addImage('logo', 'resources/logo.png');			
-			// Add player sprite
-			//gbox.addImage('player_sprite', 'resources/player_sprite.png');
-			
-			// Add player tiles
-			//gbox.addTiles({
-			//	id:      'player_tiles', // set a unique ID for future reference
-			//	image:   'player_sprite', // Use the 'sprites' image, as loaded above
-			//	tileh:   40,
-			//	tilew:   20,
-			//	tilerow: 1,
-			//	gapx:    0,
-			//	gapy:    0
-			//});
-		   
-		    // Fonts are mapped over an image, setting the first letter, the letter size, the length of all rows of letters and a horizontal/vertical gap.
-		    //gbox.addFont({ id: 'small', image: 'font', firstletter: ' ', tileh: 8, tilew: 8, tilerow: 255, gapx: 0, gapy: 0 });
-		   
 		    // When everything is ready, the 'loadAll' downloads all the needed resources, and then calls the function "main".
 		    gbox.loadAll(main);
 		}
@@ -58,8 +43,8 @@
 		
 		function main()
 		{
-		    gbox.setGroups(['background','player','game']);
-		    maingame = gamecycle.createMaingame('game', 'game');
+		    gbox.setGroups(['background','player','gamecycle']);
+		    maingame = gamecycle.createMaingame('gamecycle', 'gamecycle');
 		   
 		    maingame.gameTitleIntroAnimation=function(reset)
 		    {
@@ -79,103 +64,96 @@
 				  speed: 1
 				});
 			};
-		   
-		   
-		   maingame.pressStartIntroAnimation=function(reset)
-		   {
-		    if (reset) {
-		      toys.resetToy(this,"default-blinker");
-		    } else {
-		      toys.text.blink(this,"default-blinker",gbox.getBufferContext(),{font:"small",text:"PRESS Z TO START",valign:gbox.ALIGN_MIDDLE,halign:gbox.ALIGN_CENTER,dx:0,dy:Math.floor(gbox.getScreenH()/3),dw:gbox.getScreenW(),dh:Math.floor(gbox.getScreenH()/3)*2,blinkspeed:10});
-		      return gbox.keyIsHit("a");
+		   		   
+		    maingame.pressStartIntroAnimation=function(reset)
+		    {
+		      if (reset) {
+				toys.resetToy(this,"default-blinker");
+			  }  else {
+				toys.text.blink(this,"default-blinker",gbox.getBufferContext(),{font:"small",text:"PRESS Z TO START",valign:gbox.ALIGN_MIDDLE,halign:gbox.ALIGN_CENTER,dx:0,dy:Math.floor(gbox.getScreenH()/3),dw:gbox.getScreenW(),dh:Math.floor(gbox.getScreenH()/3)*2,blinkspeed:10});
+				return gbox.keyIsHit("a");
 		      }
-		  };
+		    };
 
-			maingame.initializeGame = function() {
-				addPlayer();
-				addMap();
-				numberOfLives = helpers.getNumberOfLives((maingame.difficulty));
+			maingame.changeLevel = function(level) {
+				if(level == null) level = "stage1"; // First level
+				currentstage = level;
+				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
+				gbox.blitTilemap(gbox.getCanvasContext("tileslayer"), tilemaps[currentstage]);
+				this.newLife();
 			};
 			
-			map = {
-				tileset: 'tiles',
-				map: loadMap(),
-				tileIsSolid: function(obj, t) {
-					return t !=null; // Wall is solid if not an empty space
-				}
+			maingame.newLife = function(up) {
+				gbox.purgeGarbage();  // Since we're starting, we can purge all now
+				
+				// Apply some common tilemap handlers to the map. Are the same for all the stages.
+				tilemaps[currentstage].tileIsSolidCeil=function(obj,t){ return (obj.group=="foes"?false:t==0) };
+				tilemaps[currentstage].tileIsSolidFloor=function(obj,t){ return t==0 };
+				
+				// Add the stage objects, according to the configured mapobjects
+		  	    var current;
+		  	    for (var i=0;i<mapobjects[currentstage].items.length;i++) {
+		  	    	current=mapobjects[currentstage].items[i];
+		  	    	switch (current.objecttype) {
+		  	    		case "player": {
+			    			toys.platformer.spawn(gbox.getObject("player","player"),help.mergeWithModel(current,{accx:0,accy:0})); // Apply to the defined object the model with no acceleration. Notes that the "objecttype" parameter is also merged to the object but ignored.
+		  	    			break;
+		  	    		}
+		  	    		default: { // All the other objects are enemies. Depending on the ID, different enemies are spawn.
+			    		 	//maingame.addEnemy(current.objecttype,current); // Data are directly taken from the resources data.
+		  	    			break;
+		  	    		}
+		  	    	}
+		  	    }
+				toys.resetToy(maingame, "gametimer"); // Start the timer
+				
 			};
-			map = help.finalizeTilemap(map);
 			
-			// New for Part 5, we create a 40x30 array to match our 40x30 tiles in the map.
-			pathMap = new Array(40);
-			for (i = 0; i < pathMap.length; i++)
-			  pathMap [i] = new Array(30);
-			  // For each element in the array, check and see if the corresponding tile is solid using our map's tileIsSolid function.
-			  //  The function will return 1 if the tile is solid, and 0 if it's empty space. We copy map(i,j) to pathMap(j,i) since there's something
-			  //  inverted in the A* pathfinding function and the present authors are too lazy to fix it. What we're creating is an array
-			  //  of 0's and 1's where each array element represent one tile and whether it's solid. This is what the pathfinding algorithm
-			  //  will use as its version of the level map.
-			  for(i = 0; i < map.map.length; i++)
-				for(j = 0; j < map.map[0].length; j++)
-				  pathMap[j][i] = map.tileIsSolid(map, map.map[i][j]);
-
-			gbox.createCanvas('map_canvas', {w: map.w, h: map.h });
-			gbox.blitTilemap(gbox.getCanvasContext('map_canvas'), map);
+			maingame.gameEvents = function() {
+				
+			};
+			
+		    maingame.initializeGame = function() {
+		    	addPlayer();
+		    	addBackground();
+		    	numberOfLives = helpers.getNumberOfLives((maingame.difficulty));
+		    };		
 			
 		    gbox.go();
 		}
 		
-		function addMap()
-		{
-			gbox.addObject({
-                    id:     'background_id',
-                    group:  'background',
-                    blit:   function() {
-                                // Clear Screen
-                                gbox.blitFade(gbox.getBufferContext(), {alpha: 1});
-                                // Center the camera on the player object.
-                                //followCamera(gbox.getObject('player', 'player_id'), {w:map.w, h:map.h});
-                                gbox.blit(gbox.getBufferContext(), 
-                                    gbox.getCanvas('map_canvas'), {
-                                        dx: 0, 
-                                        dy:0, 
-                                        dw: gbox.getCanvas('map_canvas').width,
-                                        dh: gbox.getCanvas('map_canvas').height, 
-                                        sourcecamera: true });
-                        }
-                });
-		}
-		
-		function loadMap() {
-			return help.asciiArtToMap(getMap(),[[null,' '],[0,'x']]);
-		}
-		
 		function addPlayer() {
 			gbox.addObject({
-				id:'player_id',
+				id:'player',
 				group:'player',
-				tileset:'player_tiles',
-				colh:gbox.getTiles('player_tiles').tileh,
+				tileset:'player',
 				initialize: function() {
 					// Here we're just telling it to initialize the object, in this case our player.
-				    toys.topview.initialize(this, {});
-					this.x = 20;
-					this.y = 20;
+				    toys.platformer.initialize(this,{
+						frames:{
+							still:{speed:1, frames:[0]},
+							walking:{ speed:2, frames:[1,2,1]},
+							jumping:{ speed:1, frames:[0]},
+							falling:{ speed:1, frames:[0]},
+							die:{speed:1,frames:[1]}
+						}
+					});
 				},
 				first:function(){
 					this.counter=(this.counter+1)%10;
-					// Toys.topview.controlKeys sets the main key controls. In this case we want to use the arrow keys which
-					//  are mapped to their english names. Inside this function it applies acceleration values to each of these directions					
- 					toys.platformer.applyGravity(this); // Apply gravity
+					toys.platformer.applyGravity(this); // Apply gravity
 					toys.platformer.horizontalKeys(this,{left:"left",right:"right"}); // Moves horizontally
-					//toys.platformer.verticalTileCollision(this,map,"map"); // vertical tile collision (i.e. floor)
-					//toys.platformer.horizontalTileCollision(this,map,"map"); // horizontal tile collision (i.e. walls)
-					toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump"}); // handle jumping
-					toys.topview.tileCollision(this,map,'map',null, {tolerance:6, approximation:3});
+					toys.platformer.verticalTileCollision(this,tilemaps[currentstage],"map"); // vertical tile collision (i.e. floor)
+					toys.platformer.horizontalTileCollision(this,tilemaps[currentstage],"map"); // horizontal tile collision (i.e. walls)
+					toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump"}); // handle jumping					
 					toys.platformer.handleAccellerations(this); // gravity/attrito
+					toys.platformer.setSide(this); // set horizontal side
+					toys.platformer.setFrame(this); // set the right animation frame
+					//toys.topview.tileCollision(this,map,'map',null, {tolerance:6, approximation:3});
+					
+					// Multiplier reset
 					if (this.touchedfloor) this.multiplier=0;
-					//toys.platformer.setSide(this); // set horizontal side
-					//toys.platformer.setFrame(this); // set the right animation frame
+					
 				},
 				blit:function(){ 
 					// Render the current sprite.. don't worry too much about what's going on here. We're pretty much doing
@@ -186,47 +164,28 @@
 							tile:    this.frame,
 							dx:      this.x,
 							dy:      this.y,
-							fliph:   this.fliph,
-							flipv:   this.flipv,
 							camera:  this.camera,
-							alpha:   1.0
+							fliph:   this.side,
+							flipv:   this.flipv
 					});							
 				}		
 			});
 		}
 	
-function getMap(){
-    var map1 = ["x      xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-                "x                  xx                  x",
-                "x                  xx                  x",
-                "x             x    xx                  x",
-                "x                  xxxxxxxxxx          x",
-                "x                                      x",
-                "x                                      x",
-                "x    xxxx   xxxxxxxxx           xxxxxxx ",
-                "x                  xx                  x",
-                "x                  xx                  x",
-                "xxxx               xx                  x",
-                "x      xxxxxxxxx   xx                  x",
-                "x                  xx                  x",
-                "x                  xx                  x",
-                "xxxxxxx  xxxxxxxxxxxx                  x",
-                "xxxxxxx  xxxxxxxxxxxx                  x",
-                "x                  xx         xxxx     x",
-                "x                  xx         x        x",
-                "xxxxxxxx      x    xx                  x",
-                "x             x    xx                  x",
-                "x             x    xx                  x",
-                "x             x    xx                  x",
-                "x        xxx xxxxxxxxx                 x",
-                "x                  xx                  x",
-                "xxxx                                   x",
-                "x                                      x",
-                "x                                      x",
-                "x                                      x",
-                "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"];
-        return map1;
-}	
+		function addBackground() {
+			gbox.addObject({
+				id:"bg",
+				group:"background",
+				blit:function() {
+					// Clear Screen
+                    gbox.blitFade(gbox.getBufferContext(), {alpha: 1});
+					
+					gbox.centerCamera(gbox.getObject("player","player"),{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
+					gbox.blit(gbox.getBufferContext(),gbox.getImage("bg"),{dx:0,dy:0,dw:gbox.getScreenW(),dh:gbox.getScreenH(),sourcecamera:true,parallaxx:0.5,parallaxy:0.5});
+					gbox.blit(gbox.getBufferContext(),gbox.getCanvas("tileslayer"),{dx:0,dy:0,dw:gbox.getScreenW(),dh:gbox.getScreenH(),sourcecamera:true});
+				}
+			});
+		}
 	</script>
 </body>
 </html>
