@@ -173,7 +173,7 @@
 					toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump"}); // handle jumping
 					toys.topview.tileCollision(this,map,'map',null, {tolerance:6, approximation:3});
 					toys.platformer.handleAccellerations(this); // gravity/attrito
-					
+					if (this.touchedfloor) this.multiplier=0;
 					//toys.platformer.setSide(this); // set horizontal side
 					//toys.platformer.setFrame(this); // set the right animation frame
 				},
