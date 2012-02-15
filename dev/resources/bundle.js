@@ -1,7 +1,8 @@
 {
 	// Graphic resources.
 	addImage:[
-		["sprites","resources/cels.png"],	
+		["sprites","resources/cels.png"],
+		["bg","resources/bg1.png"],	
 		["player_sprite","resources/player_sprite.png"],
 		["font","resources/font.png"],		
 		["logo","resources/logo.png"]
