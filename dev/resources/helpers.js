@@ -17,7 +17,7 @@ var helpers={
 	},
 	isGameWon:function(level){
 		if(level == 10)
-			return true;
+			return true; 
 		return false;
 	},
 	isPlayerDead:function(isPlayerTouchingEnemyWithFeet){
