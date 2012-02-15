@@ -26,23 +26,16 @@ var helpers={
 		return true;
 	},
 	isSolidCeil:function(t){
-		
-					// Apply some common tilemap handlers to the map. Are the same for all the stages.
-			  //  tilemaps[currentstage].tileIsSolidCeil=function(obj,t){
-				
-				 if(t==0 || t==1 || t==2 || t==3 || t==4 ||  t==5 || t==6)
-				    return true;
-				return false;
+		// Apply some common tilemap handlers to the map. Are the same for all the stages.
+			
+		if(t==0 || t==1 || t==2 || t==3 || t==4 ||  t==5 || t==6)
+		   return true;
+	       return false;
 	},
-	/*isSolidFloor:function(t){
-
-	
-			    
-			//    tilemaps[currentstage].tileIsSolidFloor=function(obj,t){
-				if(t==0 || t==1 || t==2 || t==3 || t==4 ||  t==5 || t==6)
-				    return true;
-				return false;
-			    
-	},*/
+	isSolidFloor:function(t){
+		if(t==0 || t==1 || t==2 || t==3 || t==4 ||  t==5 || t==6)
+		    return true;
+		return false;    
+	},
 	
 }
