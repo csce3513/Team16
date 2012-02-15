@@ -78,7 +78,7 @@
 				currentstage = level;
 				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
 				gbox.blitTilemap(gbox.getCanvasContext("tileslayer"), tilemaps[currentstage]);
-				this.newLife();
+				this.newLife();  
 			};
 			
 			maingame.newLife = function(up)
@@ -86,21 +86,8 @@
 			    gbox.purgeGarbage();  // Since we're starting, we can purge all now					
 			    // Apply some common tilemap handlers to the map. Are the same for all the stages.
 			  
-			    tilemaps[currentstage].tileIsSolidCeil=function(obj,t){ return (obj.group=="foes"?false:helpers.isSolidCeil(t) };
-			    /*
-			    function(obj,t){
-				if(obj.group=="foes")
-				    return false;
-				else if(t==0 || t== 1 || t==2 || t==3 || t==4 ||  t==5 || t==6)
-				    return true;
-			    };*/
-			    
-			    tilemaps[currentstage].tileIsSolidFloor=function(obj,t){
-				if(t==0 || t== 1 || t==2 || t==3 || t==4 ||  t==5 || t==6)
-				    return true;
-				else
-				    return false;
-			    };
+			    tilemaps[currentstage].tileIsSolidCeil=function(obj,t){ return (obj.group=="foes"?false:helpers.isSolidCeil(t)) };
+			    tilemaps[currentstage].tileIsSolidFloor=function(obj,t){ return helpers.isSolidFloor(t) };
 				
 			    // Add the stage objects, according to the configured mapobjects
 		  	    var current;

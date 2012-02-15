@@ -65,6 +65,14 @@
 	  var actual = helpers.isPlayerDead(true)	  
 	  equal( actual, false, "Should be false " );
 	});
+	    test("if the player is touching a block with the character's head", function() {
+	  var actual = helpers.isSolidCeil(0)	  
+	  equal( actual, true, "Should be true " );
+	});
+	test("if the player is touching a block with the character's head", function() {
+	var actual = helpers.isSolidCeil(null)	  
+	equal( actual, false, "Should be false " );
+	});    
   });
   </script>
   
