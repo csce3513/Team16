@@ -74,8 +74,7 @@
 		    };
 
 			maingame.changeLevel = function(level) {
-				if(level == null) level = "stage1"; // First level
-				currentstage = level;
+				currentstage = helpers.setStage(level);
 				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
 				gbox.blitTilemap(gbox.getCanvasContext("tileslayer"), tilemaps[currentstage]);
 				this.newLife();  

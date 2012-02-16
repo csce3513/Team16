@@ -61,6 +61,14 @@
 	  var actual = helpers.isPlayerDead(false)	  
 	  equal( actual, true, "Should be true " );
 	});
+	module("Change Level");
+	test("Calling the maingame.changeLevel function changes level", function() {	  
+	  var currentstage = helpers.setStage("stage2");
+	  equal(currentstage, "stage2", "Should equal stage2");
+	  currentstage = helpers.setStage(null);
+	  equal(currentstage, "stage1", "null value should return stage1");
+	});
+	module("Background Tiles");
 	test("if the player is touching an enemy with the feet then he dies", function() {
 	  var actual = helpers.isPlayerDead(true)	  
 	  equal( actual, false, "Should be false " );
