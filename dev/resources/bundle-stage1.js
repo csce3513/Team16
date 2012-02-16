@@ -16,10 +16,9 @@
 					{objecttype:"tiger", x:210, y:20, side:0},
 					{objecttype:"tiger", x:360, y:20, side:0},
 					{objecttype:"tiger", x:460, y:20, side:0},
-					{objecttype:"tiger", x:600, y:180, side:0},
-					{objecttype:"tiger", x:700, y:20, side:0},
-					{objecttype:"tiger", x:900, y:200, side:0},
-					{objecttype:"tiger", x:1200, y:200, side:0}
+					{objecttype:"tiger", x:600, y:10, side:0},
+					{objecttype:"tiger", x:700, y:10, side:0},
+					{objecttype:"tiger", x:900, y:10, side:0}
 				]
 			}
 		},
