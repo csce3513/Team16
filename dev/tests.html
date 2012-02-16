@@ -58,7 +58,7 @@
 	
 	module("Player dies");
 	test("if the player is touching an enemy anywhere but the feet then he dies", function() {
-	  var actual = helpers.isPlayerDead(false)	  
+	  var actual = helpers.isPlayerDead(false); 
 	  equal( actual, true, "Should be true " );
 	});
 	module("Change Level");
@@ -70,17 +70,21 @@
 	});
 	module("Background Tiles");
 	test("if the player is touching an enemy with the feet then he dies", function() {
-	  var actual = helpers.isPlayerDead(true)	  
+	  var actual = helpers.isPlayerDead(true);	  
 	  equal( actual, false, "Should be false " );
 	});
 	    test("if the player is touching a block with the character's head", function() {
-	  var actual = helpers.isSolidCeil(0)	  
+	  var actual = helpers.isSolidCeil(0);  
 	  equal( actual, true, "Should be true " );
 	});
 	test("if the player is touching a block with the character's head", function() {
-	var actual = helpers.isSolidCeil(null)	  
+	var actual = helpers.isSolidCeil(null);	  
 	equal( actual, false, "Should be false " );
 	});    
+	test("test ternary function", function() {
+		 var actual = false?0:1
+	equal( actual, 1, "Should be false " );
+	});  
   });
   </script>
   

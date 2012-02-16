@@ -80,8 +80,7 @@
 				this.newLife();  
 			};
 			
-			maingame.newLife = function(up)
-			{
+			maingame.newLife = function(up){
 			    gbox.purgeGarbage();  // Since we're starting, we can purge all now					
 			    // Apply some common tilemap handlers to the map. Are the same for all the stages.
 			  
@@ -108,19 +107,20 @@
 			};
 			
 			maingame.gameEvents = function() {
-				
+				if (gbox.groupIsEmpty("enemies"))
+					maingame.gameIsCompleted();
 			};
 			
 			maingame.addEnemy = function(type, data) {
 				gbox.addObject({
 					group:"enemies",
-					tileset:"enemy-goo",
+					tileset:"lsu-tiger",
 					initialize:function() {
 						toys.platformer.initialize(this, {
 							frames:{
 								still: {speed:1, frames:[0]},
-								walking:{speed:4,frames:[0,1]},
-								jumping:{speed:1,framees:[0]},
+								walking:{speed:2,frames:[0,1,2,1,0]},
+								jumping:{speed:1,frames:[0]},
 								falling:{speed:1, frames:[0]},
 								die:{speed:1,frames:[0]}
 							},
@@ -141,22 +141,29 @@
 						toys.platformer.auto.dontFall(this,tilemaps[currentstage],"map"); //prevent from falling from current platform
 						toys.platformer.verticalTileCollision(this,tilemaps[currentstage],"map"); // vertical tile collision (i.e. floor)
 						toys.platformer.horizontalTileCollision(this,tilemaps[currentstage],"map"); // horizontal tile collision (i.e. walls)
-						//if (toys.platformer.canJump(this)&&toys.timer.randomly(this,"jumper",{base:50,range:50})) this.accy=-this.jumpaccy; // Jump randomly (the toy is resetted the first call)
+						if (toys.platformer.canJump(this)&&toys.timer.randomly(this,"jumper",{base:50,range:50})) this.accy=-this.jumpaccy; // Jump randomly (the toy is resetted the first call)
 						toys.platformer.handleAccellerations(this);
-						toys.platformer.setFrame(this);	
-
+						toys.platformer.setFrame(this);
+						
 						var player = gbox.getObject("player","player");
 						
 						if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
 							gbox.trashObject(this); // Remove this enemy
 							toys.platformer.bounce(player,{jumpsize:20});
-						}
-						
+						}	
 						
 					},
 					blit:function() {
 						if (gbox.objectIsVisible(this))
-									gbox.blitTile(gbox.getBufferContext(),{tileset:this.tileset,tile:this.frame,dx:this.x,dy:this.y,camera:this.camera,fliph:this.side,flipv:this.flipv});
+									gbox.blitTile(gbox.getBufferContext(),{
+										tileset:this.tileset,
+										tile:this.frame,
+										dx:this.x,
+										dy:this.y,
+										camera:this.camera,
+										fliph:this.side,
+										flipv:this.flipv
+									});
 					}
 				});
 			}
@@ -196,8 +203,7 @@
 					toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump"}); // handle jumping					
 					toys.platformer.handleAccellerations(this); // gravity/attrito
 					toys.platformer.setSide(this); // set horizontal side
-					toys.platformer.setFrame(this); // set the right animation frame
-					//toys.topview.tileCollision(this,map,'map',null, {tolerance:6, approximation:3});
+					toys.platformer.setFrame(this); // set the right animation frame					
 					
 					// Multiplier reset
 					if (this.touchedfloor) this.multiplier=0;
