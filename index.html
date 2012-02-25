@@ -73,7 +73,8 @@
 		      }
 		    };
 
-			maingame.changeLevel = function(level) {
+			maingame.changeLevel = function(level) {	
+											
 				currentstage = helpers.setStage(level);
 				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
 				gbox.blitTilemap(gbox.getCanvasContext("tileslayer"), tilemaps[currentstage]);
@@ -150,7 +151,7 @@
 						if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
 							gbox.trashObject(this); // Remove this enemy
 							toys.platformer.bounce(player,{jumpsize:20});
-						}	
+						}
 						
 					},
 					blit:function() {

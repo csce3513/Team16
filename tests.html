@@ -6,19 +6,18 @@
   <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
 <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
 <script type="text/javascript" src="resources/helpers.js"></script>
-
+<script type="text/javascript" src="tests.js"></script>
   <script>
   
   $(document).ready(function(){
+    
     module("Getting Number of lives");
-
 	test("test helpers getting number lives for easy", function() {
 	  var actual = helpers.getNumberOfLives(0);
 	  var expected = 10;
 	  
 	  equal( actual, expected, "Should be 10 for easy" );
 	});
-	
 	test("test helpers getting number lives for medium", function() {
 	  var actual = helpers.getNumberOfLives(1);
 	  var expected = 5;
@@ -50,7 +49,6 @@
 	  var actual = helpers.isGameWon(10);	  
 	  equal( actual, true, "Should be false since lives are left" );
 	});
-	
 	test("the game is not won if have not beat last level", function() {
 	  var actual = helpers.isGameWon(9);	  
 	  equal( actual, false, "Should be false since lives are left" );
@@ -61,6 +59,7 @@
 	  var actual = helpers.isPlayerDead(false); 
 	  equal( actual, true, "Should be true " );
 	});
+	
 	module("Change Level");
 	test("Calling the maingame.changeLevel function changes level", function() {	  
 	  var currentstage = helpers.setStage("stage2");
@@ -68,23 +67,57 @@
 	  currentstage = helpers.setStage(null);
 	  equal(currentstage, "stage1", "null value should return stage1");
 	});
+	
 	module("Background Tiles");
 	test("if the player is touching an enemy with the feet then he dies", function() {
 	  var actual = helpers.isPlayerDead(true);	  
 	  equal( actual, false, "Should be false " );
 	});
-	    test("if the player is touching a block with the character's head", function() {
+	test("if the player is touching a block with the character's head", function() {
 	  var actual = helpers.isSolidCeil(0);  
 	  equal( actual, true, "Should be true " );
 	});
 	test("if the player is touching a block with the character's head", function() {
-	var actual = helpers.isSolidCeil(null);	  
-	equal( actual, false, "Should be false " );
+		var actual = helpers.isSolidCeil(null);	  
+		equal( actual, false, "Should be false " );
 	});    
 	test("test ternary function", function() {
 		 var actual = false?0:1
 	equal( actual, 1, "Should be false " );
 	});  
+  
+    module("Game Object Creation");
+    test("test if game is created", function() {
+    	 var maingame = gamecycle.createMaingame('gamecycle','gamecycle'); 
+    	 equal(maingame.id, 'gamecycle', "id should equal gamecycle"); 
+    	 equal(maingame.group, 'gamecycle', "id should equal gamecycle"); 	
+    });
+    
+    module("Game Events");
+    test("Game over if all enemies are dead then maingame state is changed", function() {
+    	 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 // Mocking the groupIsEmpty function since we don't need to test that logic.  The 
+    	 // gbox.groupIsEmpty function is called when checking to see if game is over
+    	 gbox.groupIsEmpty = function(group){
+    	 	return true;
+    	 };
+    	 helpers.checkIfGameIsCompleted(maingame); 
+    	 var actual = maingame.state;
+    	 equal(actual, 800);
+    	 
+    });
+    test("Game over if all enemies are dead then maingame state is not changed", function() {
+    	 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 // Mocking the groupIsEmpty function since we don't need to test that logic
+    	 gbox.groupIsEmpty = function(group){
+    	 	return false;
+    	 };
+    	 helpers.checkIfGameIsCompleted(maingame); 
+    	 var actual = maingame.state;
+    	 equal(actual, 50);    	 
+    });    
+    test("Switching levels ")
+    
   });
   </script>
   

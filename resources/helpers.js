@@ -1,5 +1,3 @@
-
-
 var helpers={
 
 	// CONSTANTS
@@ -42,6 +40,11 @@ var helpers={
 		if (level == null)
 			return "stage1";
 		return level;
+	},
+	checkIfGameIsCompleted:function(maingame){
+		if (gbox.groupIsEmpty("enemies"))
+			maingame.gameIsCompleted();
 	}
 	
 }
+
