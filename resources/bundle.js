@@ -16,6 +16,7 @@
 		{id:"crimson-tide",image:"sprites",tileh:25,tilew:40,tilerow:3,gapx:0,gapy:75}
 	],
 	addBundle:[
-		{file:"resources/bundle-stage1.js"}
+		{file:"resources/bundle-stage1.js"},
+		{file:"resources/bundle-stage2.js"}
 	]
 }

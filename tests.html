@@ -116,7 +116,14 @@
     	 var actual = maingame.state;
     	 equal(actual, 50);    	 
     });    
-    test("Switching levels ")
+    module("Change Level");
+	test("Calling the maingame.changeLevel function changes level", function() {	  
+	  var currentstage = helpers.setStage("stage2");
+	  equal(currentstage, "stage2", "Should equal stage2");
+	  currentstage = helpers.setStage(null);
+	  equal(currentstage, "stage1", "null value should return stage1");
+	});
+	
     
   });
   </script>

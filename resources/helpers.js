@@ -44,6 +44,9 @@ var helpers={
 	checkIfGameIsCompleted:function(maingame){
 		if (gbox.groupIsEmpty("enemies"))
 			maingame.gameIsCompleted();
+	},
+	areAllEnemiesDead:function(){
+		
 	}
 	
 }

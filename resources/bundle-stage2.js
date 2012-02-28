@@ -8,18 +8,18 @@
 		},
 		{
 			object:"mapobjects",
-			property:"stage1",
+			property:"stage2",
 			value:{
 				items:[
 					{objecttype:"player", x:40, y:180, side:1},
-					{objecttype:"elephant", x:25, y:180, side:1}
+					{objecttype:"tiger", x:25, y:180, side:1}
 				]
 			}
 		},
 		{
 			object:"tilemaps",
-			property:"stage1",
-			value:{
+			property:"stage2",
+			value:help.finalizeTilemap({
 				tileset:"tiles",
 				map:[
 					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
@@ -35,7 +35,7 @@
 					[null,null,null,null,null,null,null,null,null,3,3,5,3,3,null,null,null,null,null,null,null,null,5,null,5,5,null,null,1,1,1,null,null,null,null,null,1,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,3,null],
 					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 				]
-			}
+			})
 		}
 	]
 }
