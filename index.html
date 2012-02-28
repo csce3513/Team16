@@ -109,13 +109,7 @@
 			};
 			
 			maingame.gameEvents = function() {
-				if (gbox.groupIsEmpty("enemies"))
-				{
-					if(mapmeta[currentstage].nextLevel)
-						maingame.gotoLevel(mapmeta[currentstage].nextLevel);
-					else
-						maingame.gameIsCompleted();
-				}
+				helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage);
 			};
 			
 			maingame.addEnemy = function(type, data) {

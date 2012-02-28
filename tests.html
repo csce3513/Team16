@@ -92,29 +92,51 @@
     	 equal(maingame.id, 'gamecycle', "id should equal gamecycle"); 
     	 equal(maingame.group, 'gamecycle', "id should equal gamecycle"); 	
     });
-    
+	
     module("Game Events");
-    test("Game over if all enemies are dead then maingame state is changed", function() {
-    	 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
-    	 // Mocking the groupIsEmpty function since we don't need to test that logic.  The 
-    	 // gbox.groupIsEmpty function is called when checking to see if game is over
-    	 gbox.groupIsEmpty = function(group){
-    	 	return true;
-    	 };
-    	 helpers.checkIfGameIsCompleted(maingame); 
+	test("Calling helpers.areEnemiesDead() returns true if enemy group is empty", function (){
+		var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 gbox.groupIsEmpty = function(group){return true;};// Mocking the groupIsEmpty
+		 var actual = helpers.areEnemiesDead();
+		 equal(actual, true);
+	});
+	test("Calling helpers.areEnemiesDead() returns false if enemy group isnt empty", function (){
+		var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 gbox.groupIsEmpty = function(group){return false;};
+		 var actual = helpers.areEnemiesDead();
+		 equal(actual, false);
+	});
+		
+    test("Calling helpers.checkIfGameIsCompleted() sets gamestate to 800 if game is won ", function() {
+    	 var currentstage = "stage1";		 
+		 var mapmeta = new Array();
+		 mapmeta[currentstage] = new Object();		 
+		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 gbox.groupIsEmpty = function(group){return true;};
+    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
     	 var actual = maingame.state;
     	 equal(actual, 800);
     	 
     });
-    test("Game over if all enemies are dead then maingame state is not changed", function() {
-    	 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
-    	 // Mocking the groupIsEmpty function since we don't need to test that logic
-    	 gbox.groupIsEmpty = function(group){
-    	 	return false;
-    	 };
-    	 helpers.checkIfGameIsCompleted(maingame); 
+	test("Calling helpers.checkIfGameIsCompleted() sets gamestate to 400 if game is going to next level", function() {
+    	 var currentstage = "stage1";		 
+		 var mapmeta = new Array();
+		 mapmeta[currentstage] = new Object();	
+		 mapmeta[currentstage].nextLevel = "stage2";
+		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 gbox.groupIsEmpty = function(group){return true;};
+    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
     	 var actual = maingame.state;
-    	 equal(actual, 50);    	 
+    	 equal(actual, 400, "State is 400 when moving onto the next level");    	 
+    });
+    test("Calling helpers.checkIfGameIsCompleted() leaves gamestate at 50 if player hasnt won the level yet", function() {    	 
+		 var currentstage = "stage1";		 
+		 var mapmeta = new Array();
+		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');    	 
+    	 gbox.groupIsEmpty = function(group){return false;};
+    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
+    	 var actual = maingame.state;
+    	 equal(actual, 50, "State is 50 when game state is not changing");    	 
     });    
     module("Change Level");
 	test("Calling the maingame.changeLevel function changes level", function() {	  

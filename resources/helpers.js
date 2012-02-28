@@ -41,12 +41,17 @@ var helpers={
 			return "stage1";
 		return level;
 	},
-	checkIfGameIsCompleted:function(maingame){
-		if (gbox.groupIsEmpty("enemies"))
-			maingame.gameIsCompleted();
+	checkIfGameIsCompleted:function(maingame, mapmeta, currentstage){
+		if (this.areEnemiesDead())
+		{			
+			if(mapmeta[currentstage].nextLevel != null)
+				maingame.gotoLevel(mapmeta[currentstage].nextLevel);
+			else
+				maingame.gameIsCompleted();
+		}
 	},
-	areAllEnemiesDead:function(){
-		
+	areEnemiesDead:function(){		
+		return gbox.groupIsEmpty("enemies")
 	}
 	
 }
