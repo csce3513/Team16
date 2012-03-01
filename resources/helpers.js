@@ -1,5 +1,3 @@
-
-
 var helpers={
 
 	// CONSTANTS
@@ -47,6 +45,19 @@ var helpers={
 		if (level == null)
 			return "stage1";
 		return level;
+	},
+	checkIfGameIsCompleted:function(maingame, mapmeta, currentstage){
+		if (this.areEnemiesDead())
+		{			
+			if(mapmeta[currentstage].nextLevel != null)
+				maingame.gotoLevel(mapmeta[currentstage].nextLevel);
+			else
+				maingame.gameIsCompleted();
+		}
+	},
+	areEnemiesDead:function(){		
+		return gbox.groupIsEmpty("enemies")
 	}
 	
 }
+

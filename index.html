@@ -75,7 +75,8 @@
 		      }
 		    };
 
-			maingame.changeLevel = function(level) {
+			maingame.changeLevel = function(level) {	
+											
 				currentstage = helpers.setStage(level);
 				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
 				gbox.blitTilemap(gbox.getCanvasContext("tileslayer"), tilemaps[currentstage]);
@@ -84,6 +85,7 @@
 			};
 			
 			maingame.newLife = function(up){
+			    gbox.trashGroup('enemies')
 			    gbox.purgeGarbage();  // Since we're starting, we can purge all now					
 			    // Apply some common tilemap handlers to the map. Are the same for all the stages.
 			  
@@ -110,65 +112,14 @@
 			};
 			
 			maingame.gameEvents = function() {
-				if (gbox.groupIsEmpty("enemies"))
-					maingame.gameIsCompleted();
+				helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage);
 			};
 			
 			maingame.addEnemy = function(type, data) {
-				gbox.addObject({
-					group:"enemies",
-					tileset:"lsu-tiger",
-					initialize:function() {
-						toys.platformer.initialize(this, {
-							frames:{
-								still: {speed:1, frames:[0]},
-								walking:{speed:2,frames:[0,1,2,1,0]},
-								jumping:{speed:1,frames:[0]},
-								falling:{speed:1, frames:[0]},
-								die:{speed:1,frames:[0]}
-							},
-							x:data.x,
-							y:data.y,
-							jumpaccy:10,
-							side:data.side
-						});
-					},
-					first:function(){
-						this.counter = (this.counter+1)%10;
-						toys.platformer.applyGravity(this);
-						toys.platformer.auto.horizontalBounce(this); // Bounces horizontally if hit the sideways walls
-						if(this.touchedfloor)
-							toys.platformer.auto.goomba(this,{moveWhileFalling:true,speed:2});
-						else
-							this.accx = 0; // Stay still (i.e. jump only vertically)
-						toys.platformer.auto.dontFall(this,tilemaps[currentstage],"map"); //prevent from falling from current platform
-						toys.platformer.verticalTileCollision(this,tilemaps[currentstage],"map"); // vertical tile collision (i.e. floor)
-						toys.platformer.horizontalTileCollision(this,tilemaps[currentstage],"map"); // horizontal tile collision (i.e. walls)
-						if (toys.platformer.canJump(this)&&toys.timer.randomly(this,"jumper",{base:50,range:50})) this.accy=-this.jumpaccy; // Jump randomly (the toy is resetted the first call)
-						toys.platformer.handleAccellerations(this);
-						toys.platformer.setFrame(this);
-						
-						var player = gbox.getObject("player","player");
-						
-						if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
-							gbox.trashObject(this); // Remove this enemy
-							toys.platformer.bounce(player,{jumpsize:20});
-						}	
-						
-					},
-					blit:function() {
-						if (gbox.objectIsVisible(this))
-									gbox.blitTile(gbox.getBufferContext(),{
-										tileset:this.tileset,
-										tile:this.frame,
-										dx:this.x,
-										dy:this.y,
-										camera:this.camera,
-										fliph:this.side,
-										flipv:this.flipv
-									});
-					}
-				});
+				if(type == "tiger")
+					addTiger(type, data);
+				if(type == "elephant")
+					addElephant(type, data);
 			}
 			
 		    maingame.initializeGame = function() {
@@ -242,6 +193,120 @@
 					gbox.blit(gbox.getBufferContext(),gbox.getCanvas("tileslayer"),{dx:0,dy:0,dw:gbox.getScreenW(),dh:gbox.getScreenH(),sourcecamera:true});
 				}
 			});
+		}
+	
+		function addTiger(type, data) {
+			gbox.addObject({
+					group:"enemies",
+					tileset:"lsu-tiger",
+					initialize:function() {
+						toys.platformer.initialize(this, {
+							frames:{
+								still: {speed:1, frames:[0]},
+								walking:{speed:2,frames:[0,1,2,1,0]},
+								jumping:{speed:1,frames:[0]},
+								falling:{speed:1, frames:[0]},
+								die:{speed:1,frames:[0]}
+							},
+							x:data.x,
+							y:data.y,
+							jumpaccy:10,
+							side:data.side
+						});
+					},
+					first:function(){
+						this.counter = (this.counter+1)%10;
+						toys.platformer.applyGravity(this);
+						toys.platformer.auto.horizontalBounce(this); // Bounces horizontally if hit the sideways walls
+						if(this.touchedfloor)
+							toys.platformer.auto.goomba(this,{moveWhileFalling:true,speed:2});
+						else
+							this.accx = 0; // Stay still (i.e. jump only vertically)
+						toys.platformer.auto.dontFall(this,tilemaps[currentstage],"map"); //prevent from falling from current platform
+						toys.platformer.verticalTileCollision(this,tilemaps[currentstage],"map"); // vertical tile collision (i.e. floor)
+						toys.platformer.horizontalTileCollision(this,tilemaps[currentstage],"map"); // horizontal tile collision (i.e. walls)
+						if (toys.platformer.canJump(this)&&toys.timer.randomly(this,"jumper",{base:50,range:50})) this.accy=-this.jumpaccy; // Jump randomly (the toy is resetted the first call)
+						toys.platformer.handleAccellerations(this);
+						toys.platformer.setFrame(this);
+						
+						var player = gbox.getObject("player","player");
+						
+						if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
+							gbox.trashObject(this); // Remove this enemy
+							toys.platformer.bounce(player,{jumpsize:20});
+						}
+						
+					},
+					blit:function() {
+						if (gbox.objectIsVisible(this))
+									gbox.blitTile(gbox.getBufferContext(),{
+										tileset:this.tileset,
+										tile:this.frame,
+										dx:this.x,
+										dy:this.y,
+										camera:this.camera,
+										fliph:this.side,
+										flipv:this.flipv
+									});
+					}
+				});
+		}
+	
+		function addElephant(type, data){
+			gbox.addObject({
+					group:"enemies",
+					tileset:"crimson-tide",
+					initialize:function() {
+						toys.platformer.initialize(this, {
+							frames:{
+								still: {speed:1, frames:[0]},
+								walking:{speed:2,frames:[0,1,2,1,0]},
+								jumping:{speed:1,frames:[0]},
+								falling:{speed:1, frames:[0]},
+								die:{speed:1,frames:[0]}
+							},
+							x:data.x,
+							y:data.y,
+							jumpaccy:10,
+							side:data.side
+						});
+					},
+					first:function(){
+						this.counter = (this.counter+1)%10;
+						toys.platformer.applyGravity(this);
+						toys.platformer.auto.horizontalBounce(this); // Bounces horizontally if hit the sideways walls
+						if(this.touchedfloor)
+							toys.platformer.auto.goomba(this,{moveWhileFalling:true,speed:2});
+						else
+							this.accx = 0; // Stay still (i.e. jump only vertically)
+						toys.platformer.auto.dontFall(this,tilemaps[currentstage],"map"); //prevent from falling from current platform
+						toys.platformer.verticalTileCollision(this,tilemaps[currentstage],"map"); // vertical tile collision (i.e. floor)
+						toys.platformer.horizontalTileCollision(this,tilemaps[currentstage],"map"); // horizontal tile collision (i.e. walls)
+						if (toys.platformer.canJump(this)&&toys.timer.randomly(this,"jumper",{base:50,range:50})) this.accy=-this.jumpaccy; // Jump randomly (the toy is resetted the first call)
+						toys.platformer.handleAccellerations(this);
+						toys.platformer.setFrame(this);
+						
+						var player = gbox.getObject("player","player");
+						
+						if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
+							gbox.trashObject(this); // Remove this enemy
+							toys.platformer.bounce(player,{jumpsize:20});
+						}
+						
+					},
+					blit:function() {
+						if (gbox.objectIsVisible(this))
+									gbox.blitTile(gbox.getBufferContext(),{
+										tileset:this.tileset,
+										tile:this.frame,
+										dx:this.x,
+										dy:this.y,
+										camera:this.camera,
+										fliph:this.side,
+										flipv:this.flipv
+									});
+					}
+				});
 		}
 	</script>
 </body>
