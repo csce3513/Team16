@@ -68,6 +68,12 @@
 	  currentstage = helpers.setStage(null);
 	  equal(currentstage, "stage1", "null value should return stage1");
 	});
+	module("Check Audio");
+	test("Check to see if proper audio files are present and load", function() {	  
+	  var isAudio = helpers.checkAudio("testaudio");
+	  equal(isAudio, true, "Function should return True if audio files are loaded");
+	  
+	});
 	module("Background Tiles");
 	test("if the player is touching an enemy with the feet then he dies", function() {
 	  var actual = helpers.isPlayerDead(true);	  

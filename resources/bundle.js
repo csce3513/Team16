@@ -7,6 +7,10 @@
 		["font","resources/font.png"],		
 		["logo","resources/logo.png"],
 		["enemysprites","resources/enemysprites.png"]
+	],	
+	addAudio:[
+		["default-music",["resources/audio/fightsong.mp3","resources/audio/fightsong.ogg"],{channel:"bgmusic",loop:true}],
+		["ingame",["resources/audio/testaudio.mp3","resources/audio/testaudio.ogg"],{channel:"bgmusic",loop:true}]
 	],
 	addFont:[
 		{id:"small",image:"font",firstletter:" ",tileh:8,tilew:8,tilerow:255,gapx:0,gapy:0}

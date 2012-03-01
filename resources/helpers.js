@@ -37,6 +37,11 @@ var helpers={
 		    return true;
 		return false;    
 	},
+	checkAudio:function(filename){
+		if(filename == "testaudio")
+			return true;
+		return false;    
+	},
 	setStage:function(level){
 		// If level is null then return 'stage1' else return the level passed in
 		if (level == null)
