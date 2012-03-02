@@ -145,6 +145,9 @@
 						}
 					});
 				},
+				collisionEnabled:function() {
+					return !maingame.gameIsHold()&&!this.killed;
+				},		
 				first:function(){
 					this.counter=(this.counter+1)%10;
 					toys.platformer.applyGravity(this); // Apply gravity
@@ -192,7 +195,9 @@
 			});
 		}
 	
-		function addTiger(type, data) {
+		function addTiger(type, data)
+		{
+
 			gbox.addObject({
 					group:"enemies",
 					tileset:"lsu-tiger",
@@ -228,11 +233,14 @@
 						
 						var player = gbox.getObject("player","player");
 						
-						if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
-							gbox.trashObject(this); // Remove this enemy
-							toys.platformer.bounce(player,{jumpsize:20});
-						}
-						
+						//Check if enemy or players is dead
+						if (player.collisionEnabled())
+						    if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
+							    gbox.trashObject(this); // Remove this enemy
+							    toys.platformer.bounce(player,{jumpsize:20});
+						    }else
+						    if(helpers.didCollide(this,player,2))
+							helpers.kill(); //Kill the player	
 					},
 					blit:function() {
 						if (gbox.objectIsVisible(this))
@@ -268,7 +276,7 @@
 							side:data.side
 						});
 					},
-					first:function(){
+				first:function(){
 						this.counter = (this.counter+1)%10;
 						toys.platformer.applyGravity(this);
 						toys.platformer.auto.horizontalBounce(this); // Bounces horizontally if hit the sideways walls
@@ -285,11 +293,14 @@
 						
 						var player = gbox.getObject("player","player");
 						
-						if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
-							gbox.trashObject(this); // Remove this enemy
-							toys.platformer.bounce(player,{jumpsize:20});
-						}
-						
+						//Check if enemy or players is dead
+						if (player.collisionEnabled())
+						    if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
+							    gbox.trashObject(this); // Remove this enemy
+							    toys.platformer.bounce(player,{jumpsize:20});
+						    }else
+						    if(helpers.didCollide(this,player,2))
+							helpers.kill(); //Kill the player			    
 					},
 					blit:function() {
 						if (gbox.objectIsVisible(this))

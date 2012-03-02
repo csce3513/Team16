@@ -55,9 +55,16 @@
 	});
 	
 	module("Player dies");
-	test("if the player is touching an enemy anywhere but the feet then he dies", function() {
-	  var actual = helpers.isPlayerDead(false); 
-	  equal( actual, true, "Should be true " );
+	test("if the player is touching an enemy anywhere but the feet then there is a collision", function() {
+	  //Creating objects that are one on top of the other.
+	  var o1 = {y:5,x:5,h:2,w:2};
+	  var o2= {y:2,x:2,h:2,w:2};
+	  //Apply a tolerance of .5	  
+	  var tolerance=.5;
+	  //Save the actual value after calling the function
+	  var actual = helpers.didCollide(o1,o2,tolerance);
+	  //Check to see if it passed
+	  equal( actual, false, "Should be false " );
 	});
 	
 	module("Change Level");
