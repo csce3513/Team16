@@ -43,7 +43,7 @@
 		
 		function main()
 		{
-		    gbox.setGroups(['background','player','enemies','gamecycle']);
+		    gbox.setGroups(['background','player','enemies','boss','gamecycle']);
 			gbox.setAudioChannels({bgmusic: {volume: 0.5}, sfx: {volume: 0.8}});
 		    maingame = gamecycle.createMaingame('gamecycle', 'gamecycle');
 		   
@@ -324,7 +324,6 @@
 		
 		function addTigerBoss(type, data)
 		{
-
 			gbox.addObject({
 					group:"boss",
 					tileset:"tiger-boss",
@@ -332,7 +331,7 @@
 						toys.platformer.initialize(this, {
 							frames:{
 								still: {speed:1, frames:[0]},
-								walking:{speed:2,frames:[0,1,2,1,0]},
+								walking:{speed:2,frames:[0]},
 								jumping:{speed:1,frames:[0]},
 								falling:{speed:1, frames:[0]},
 								die:{speed:1,frames:[0]}

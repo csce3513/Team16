@@ -66,7 +66,7 @@ var helpers={
 		}
 	},
 	areEnemiesDead:function(){		
-		return gbox.groupIsEmpty("enemies")
+		return gbox.groupIsEmpty("boss")
 	}
 	
 }
