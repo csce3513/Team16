@@ -1,3 +1,5 @@
+
+
 var helpers={
 
 	// CONSTANTS
@@ -23,16 +25,6 @@ var helpers={
 			return false;
 		return true;
 	},
-	kill:function(){
-		maingame.playerDied({wait:1});
-		var player = gbox.getObject("player","player");
-		player.killed=true;
-		
-	},
-	didCollide:function(o1,o2,t) {//Checks to see if 2 objects collied based on their x and w location 
-		if (!t) t=0;
-		return !((o1.y+o1.h-1-t<o2.y+t) || (o1.y+t> o2.y+o2.h-1-t) || (o1.x+o1.w-1-t<o2.x+t) || (o1.x+t>o2.x+o2.w-1-t));
-	},
 	isSolidCeil:function(t){
 		// Apply some common tilemap handlers to the map. Are the same for all the stages.
 			
@@ -45,29 +37,11 @@ var helpers={
 		    return true;
 		return false;    
 	},
-	checkAudio:function(filename){
-		if(filename == "testaudio")
-			return true;
-		return false;    
-	},
 	setStage:function(level){
 		// If level is null then return 'stage1' else return the level passed in
 		if (level == null)
 			return "stage1";
 		return level;
-	},
-	checkIfGameIsCompleted:function(maingame, mapmeta, currentstage){
-		if (this.areEnemiesDead())
-		{			
-			if(mapmeta[currentstage].nextLevel != null)
-				maingame.gotoLevel(mapmeta[currentstage].nextLevel);
-			else
-				maingame.gameIsCompleted();
-		}
-	},
-	areEnemiesDead:function(){		
-		return gbox.groupIsEmpty("boss")
 	}
 	
 }
-
