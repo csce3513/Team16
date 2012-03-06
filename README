@@ -1,3 +1,67 @@
+<<<<<<< HEAD
 Test add
 
 testing again
+=======
+________________ _______ _______    __     ______ 
+\__   __/  ____ \  ___  )       )  /  \   / ____ \
+   ) (  | (    \/ (   ) | () () |  \/) ) ( (    \/
+   | |  | (__   | (___) | || || |    | | | (____  
+   | |  |  __)  |  ___  | |(_)| |    | | |  ___ \ 
+   | |  | (     | (   ) | |   | |    | | | (   ) )
+   | |  | (____/\ )   ( | )   ( |  __) (_( (___) )
+   )_(  (_______//     \|/     \|  \____/ \_____/ 
+
++-++-++-++-++-++-++-+ +-++-++-++-++-++-++-++-++-++-++-+ |P||r||o||j||e||c||t| |D||e||s||c||r||i||p||t||i||o||n|
++-++-++-++-++-++-++-+ +-++-++-++-++-++-++-++-++-++-++-+
+CSCE 3513 - Software Engineering - Team 16 Project 
+
+Proposed Game: 
+8-bit style 2D Platformer Game
+Multiple Difficulty, levels, with puzzle and enemy killing elements, character upgrade system, background music, and character selection in later releases 
+Game theme will be an Arkansas setting with different levels: underground, at night, in Old Main, etc
+
++-++-++-++-++-++-++-++-++-++-+ +-++-+
+|R||e||l||e||a||s||e| |N||o||t||e||s|
++-++-++-++-++-++-++-+ +-++-++-++-++-+
+
+Release One: 
+
+Basic Implementation of our game, using the Akihabara engine (www.github.com/akihabara). All unit testing performed using QUnit Tests. Features implemented in this release:
+
+Our game works in almost all browsers we tested, including iPhone but not android. 
+Game will load opening screen, then ask user to press ‘Z’. Then the user is prompted to select difficulty (easy, medium, or hard). After difficulty is selected the first level is loaded, including default enemies, tiles, and the player character.
+Custom graphics we created are loaded for terrain blocks, player sprites, and backgrounds
+The player character can jump and move in the left/right direction. When he jumps on an enemy, the enemy disappears(dies). 
+
+
+
++-++-++-+ +-++-+ +-++-++-+
+|W||h||o| |W||e| |A||r||e|
++-++-++-+ +-++-+ +-++-++-+
+Four CSCE undergraduates from the University of Arkansas:
+
+David Medina
+Araceli Yanez
+Jeremy Hornberger
+Kevin Gunn 
+
++-++-++-++-++-++-++-++-++-+
+|R||e||s||o||u||r||c||e||s|
++-++-++-++-++-++-++-++-++-+
+
+QUnit Javascript Unit Testing Framework - http://docs.jquery.com/QUnit
+
+Akihabara 8-bit Game Engine - www.github.com/akihabara, http://www.kesiev.com/akihabara/
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 5588b5c51d3df3f6dd4b6e9962f5c1936d7c6b4f

@@ -6,19 +6,18 @@
   <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
 <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
 <script type="text/javascript" src="resources/helpers.js"></script>
-
+<script type="text/javascript" src="tests.js"></script>
   <script>
   
   $(document).ready(function(){
+    
     module("Getting Number of lives");
-
 	test("test helpers getting number lives for easy", function() {
 	  var actual = helpers.getNumberOfLives(0);
 	  var expected = 10;
 	  
 	  equal( actual, expected, "Should be 10 for easy" );
 	});
-	
 	test("test helpers getting number lives for medium", function() {
 	  var actual = helpers.getNumberOfLives(1);
 	  var expected = 5;
@@ -50,17 +49,24 @@
 	  var actual = helpers.isGameWon(10);	  
 	  equal( actual, true, "Should be false since lives are left" );
 	});
-	
 	test("the game is not won if have not beat last level", function() {
 	  var actual = helpers.isGameWon(9);	  
 	  equal( actual, false, "Should be false since lives are left" );
 	});
 	
 	module("Player dies");
-	test("if the player is touching an enemy anywhere but the feet then he dies", function() {
-	  var actual = helpers.isPlayerDead(false); 
-	  equal( actual, true, "Should be true " );
+	test("if the player is touching an enemy anywhere but the feet then there is a collision", function() {
+	  //Creating objects that are one on top of the other.
+	  var o1 = {y:5,x:5,h:2,w:2};
+	  var o2= {y:2,x:2,h:2,w:2};
+	  //Apply a tolerance of .5	  
+	  var tolerance=.5;
+	  //Save the actual value after calling the function
+	  var actual = helpers.didCollide(o1,o2,tolerance);
+	  //Check to see if it passed
+	  equal( actual, false, "Should be false " );
 	});
+	
 	module("Change Level");
 	test("Calling the maingame.changeLevel function changes level", function() {	  
 	  var currentstage = helpers.setStage("stage2");
@@ -68,23 +74,91 @@
 	  currentstage = helpers.setStage(null);
 	  equal(currentstage, "stage1", "null value should return stage1");
 	});
+	module("Check Audio");
+	test("Check to see if proper audio files are present and load", function() {	  
+	  var isAudio = helpers.checkAudio("testaudio");
+	  equal(isAudio, true, "Function should return True if audio files are loaded");
+	  
+	});
 	module("Background Tiles");
 	test("if the player is touching an enemy with the feet then he dies", function() {
 	  var actual = helpers.isPlayerDead(true);	  
 	  equal( actual, false, "Should be false " );
 	});
-	    test("if the player is touching a block with the character's head", function() {
+	test("if the player is touching a block with the character's head", function() {
 	  var actual = helpers.isSolidCeil(0);  
 	  equal( actual, true, "Should be true " );
 	});
 	test("if the player is touching a block with the character's head", function() {
-	var actual = helpers.isSolidCeil(null);	  
-	equal( actual, false, "Should be false " );
+		var actual = helpers.isSolidCeil(null);	  
+		equal( actual, false, "Should be false " );
 	});    
 	test("test ternary function", function() {
 		 var actual = false?0:1
 	equal( actual, 1, "Should be false " );
 	});  
+  
+    module("Game Object Creation");
+    test("test if game is created", function() {
+    	 var maingame = gamecycle.createMaingame('gamecycle','gamecycle'); 
+    	 equal(maingame.id, 'gamecycle', "id should equal gamecycle"); 
+    	 equal(maingame.group, 'gamecycle', "id should equal gamecycle"); 	
+    });
+	
+    module("Game Events");
+	test("Calling helpers.areEnemiesDead() returns true if enemy group is empty", function (){
+		var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 gbox.groupIsEmpty = function(group){return true;};// Mocking the groupIsEmpty
+		 var actual = helpers.areEnemiesDead();
+		 equal(actual, true);
+	});
+	test("Calling helpers.areEnemiesDead() returns false if enemy group isnt empty", function (){
+		var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 gbox.groupIsEmpty = function(group){return false;};
+		 var actual = helpers.areEnemiesDead();
+		 equal(actual, false);
+	});
+		
+    test("Calling helpers.checkIfGameIsCompleted() sets gamestate to 800 if game is won ", function() {
+    	 var currentstage = "stage1";		 
+		 var mapmeta = new Array();
+		 mapmeta[currentstage] = new Object();		 
+		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 gbox.groupIsEmpty = function(group){return true;};
+    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
+    	 var actual = maingame.state;
+    	 equal(actual, 800);
+    	 
+    });
+	test("Calling helpers.checkIfGameIsCompleted() sets gamestate to 400 if game is going to next level", function() {
+    	 var currentstage = "stage1";		 
+		 var mapmeta = new Array();
+		 mapmeta[currentstage] = new Object();	
+		 mapmeta[currentstage].nextLevel = "stage2";
+		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+    	 gbox.groupIsEmpty = function(group){return true;};
+    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
+    	 var actual = maingame.state;
+    	 equal(actual, 400, "State is 400 when moving onto the next level");    	 
+    });
+    test("Calling helpers.checkIfGameIsCompleted() leaves gamestate at 50 if player hasnt won the level yet", function() {    	 
+		 var currentstage = "stage1";		 
+		 var mapmeta = new Array();
+		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');    	 
+    	 gbox.groupIsEmpty = function(group){return false;};
+    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
+    	 var actual = maingame.state;
+    	 equal(actual, 50, "State is 50 when game state is not changing");    	 
+    });    
+    module("Change Level");
+	test("Calling the maingame.changeLevel function changes level", function() {	  
+	  var currentstage = helpers.setStage("stage2");
+	  equal(currentstage, "stage2", "Should equal stage2");
+	  currentstage = helpers.setStage(null);
+	  equal(currentstage, "stage1", "null value should return stage1");
+	});
+	
+    
   });
   </script>
   
