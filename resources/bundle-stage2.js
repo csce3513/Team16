@@ -12,7 +12,7 @@
 			value:{
 				items:[
 					{objecttype:"player", x:40, y:180, side:1},
-					{objecttype:"elephant", x:125, y:180, side:1},
+					{objecttype:"crimson-tide", x:125, y:180, side:1},
 					{objecttype:"tiger-boss", x: 326, y:180, side:1}
 				]
 			}

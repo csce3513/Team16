@@ -24,6 +24,7 @@ var helpers={
 		return true;
 	},
 	kill:function(){
+		gbox.playAudio("die-sound");
 		maingame.playerDied({wait:1});
 		var player = gbox.getObject("player","player");
 		player.killed=true;

@@ -10,7 +10,10 @@
 	],	
 	addAudio:[
 		["default-music",["resources/audio/fightsong.mp3","resources/audio/fightsong.ogg"],{channel:"bgmusic",loop:true}],
-		["ingame",["resources/audio/testaudio.mp3","resources/audio/testaudio.ogg"],{channel:"bgmusic",loop:true}]
+		["ingame",["resources/audio/testaudio.mp3","resources/audio/testaudio.ogg"],{channel:"bgmusic",loop:true}],
+		["die-sound",["resources/audio/die.mp3","resources/audio/die.ogg"],{channel:"sfx"}],
+		["jump-sound",["resources/audio/jump.mp3","resources/audio/jump.ogg"],{channel:"sfx"}],
+		["hit-sound",["resources/audio/hit.mp3","resources/audio/hit.ogg"],{channel:"sfx"}]
 	],
 	addFont:[
 		{id:"small",image:"font",firstletter:" ",tileh:8,tilew:8,tilerow:255,gapx:0,gapy:0}
