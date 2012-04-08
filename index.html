@@ -25,6 +25,7 @@
 		var mapobjects={}; // Loaded by external resources. Must be global.
 		var audioserver;
 		var currentstage; // The stage that is currently playing
+		var scene = "bg";
 		
 		window.addEventListener('load', loadResources, false);
 		
@@ -78,6 +79,10 @@
 			maingame.changeLevel = function(level) {	
 											
 				currentstage = helpers.setStage(level);
+				if(currentstage == "stage2")
+					scene = "bg2";
+				else
+					scene = "bg";
 				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
 				gbox.blitTilemap(gbox.getCanvasContext("tileslayer"), tilemaps[currentstage]);
 				gbox.playAudio("ingame");
@@ -117,11 +122,21 @@
 			
 			maingame.addEnemy = function(type, data) {
 				if(type == "lsu-tiger")
+				{
 					addSmallEnemy(type, data);
-				if(type == "crimson-tide")
+				}
+				else if(type == "crimson-tide")
+				{
 					addSmallEnemy(type, data);
-				if(type == "tiger-boss") //boss
+				}
+				else if(type == "flordia-gator")
+				{
+					addSmallEnemy(type, data);
+				}
+				else
+				{
 					addBoss(type,data);
+				}
 			}
 			
 		    maingame.initializeGame = function() {
@@ -185,16 +200,16 @@
 			});
 		}
 	
-		function addBackground() {
+		function addBackground() {		
 			gbox.addObject({
-				id:"bg",
+				id:scene,
 				group:"background",
 				blit:function() {
 					// Clear Screen
                     gbox.blitFade(gbox.getBufferContext(), {alpha: 1});
 					
 					gbox.centerCamera(gbox.getObject("player","player"),{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
-					gbox.blit(gbox.getBufferContext(),gbox.getImage("bg"),{dx:0,dy:0,dw:gbox.getScreenW(),dh:gbox.getScreenH(),sourcecamera:true,parallaxx:0.5,parallaxy:0.5});
+					gbox.blit(gbox.getBufferContext(),gbox.getImage(scene),{dx:0,dy:0,dw:gbox.getScreenW(),dh:gbox.getScreenH(),sourcecamera:true,parallaxx:0.5,parallaxy:0.5});
 					gbox.blit(gbox.getBufferContext(),gbox.getCanvas("tileslayer"),{dx:0,dy:0,dw:gbox.getScreenW(),dh:gbox.getScreenH(),sourcecamera:true});
 				}
 			});
@@ -216,7 +231,7 @@
 							},
 							x:data.x,
 							y:data.y,
-							jumpaccy:10,
+							jumpaccy:5,
 							side:data.side
 						});
 					},
@@ -271,7 +286,7 @@
 						toys.platformer.initialize(this, {
 							frames:{
 								still: {speed:1, frames:[0]},
-								walking:{speed:2,frames:[0]},
+								walking:{speed:2,frames:[2,1,0,1,2]},
 								jumping:{speed:1,frames:[0]},
 								falling:{speed:1, frames:[0]},
 								die:{speed:1,frames:[0]}
