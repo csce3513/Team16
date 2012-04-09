@@ -81,6 +81,8 @@
 				currentstage = helpers.setStage(level);
 				if(currentstage == "stage2")
 					scene = "bg2";
+				else if(currentstage == "stage3")
+					scene = "bg3";
 				else
 					scene = "bg";
 				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
@@ -129,7 +131,7 @@
 				{
 					addSmallEnemy(type, data);
 				}
-				else if(type == "flordia-gator")
+				else if(type == "florida-gator")
 				{
 					addSmallEnemy(type, data);
 				}

@@ -4,7 +4,7 @@
 		{
 			object:"mapmeta",
 			property:"stage2",
-			value:{}
+			value:{nextLevel:"stage3"}
 		},
 		{
 			object:"mapobjects",
