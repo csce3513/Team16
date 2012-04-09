@@ -25,7 +25,7 @@
 		var mapobjects={}; // Loaded by external resources. Must be global.
 		var audioserver;
 		var currentstage; // The stage that is currently playing
-		
+	
 		window.addEventListener('load', loadResources, false);
 		
 		
@@ -43,7 +43,7 @@
 		
 		function main()
 		{
-		    gbox.setGroups(['background','player','enemies','boss','gamecycle']);
+		    gbox.setGroups(['background','player','enemies','boss', 'sparks','gamecycle']);
 			gbox.setAudioChannels({bgmusic: {volume: 0.4}, sfx: {volume: 1.0}});
 		    maingame = gamecycle.createMaingame('gamecycle', 'gamecycle');
 		   
@@ -125,10 +125,19 @@
 			}
 			
 		    maingame.initializeGame = function() {
+				numberOfLives = helpers.getNumberOfLives((maingame.difficulty));
+				maingame.hud.setWidget("label", {widget: "label", font: "small", value: "LIVES", dx: 1, dy: 10, clear: true});
+				maingame.hud.setWidget("score", {widget: "label", font: "small", value: 0, dx: 50, dy: 5, prepad: 10, padwith: " ", clear: true});
+				maingame.hud.setWidget("lives", {widget: "symbols", minvalue: 0, value: numberOfLives, maxshown: 6, tileset: "tiledfont", tiles: [10], dx: 42, dy: 10, gapx: 8, gapy: 0});
+				maingame.hud.setWidget("stage", {widget: "label", font: "small", value: "", postpad: 7, padwith: " ", dx: 0, dy: gbox.getScreenH()-3, clear: true});
 		    	addPlayer();
 		    	addBackground();
-		    	numberOfLives = helpers.getNumberOfLives((maingame.difficulty));
+
 		    };		
+			
+			maingame.gameIsOver = function() {
+			return maingame.hud.getValue("lives", "value")  ===  0;
+			}
 			
 		    gbox.go();
 		}
@@ -153,6 +162,13 @@
 				collisionEnabled:function() {
 					return !maingame.gameIsHold()&&!this.killed;
 				},		
+				kill:function(){
+					maingame.hud.addValue("lives", "value", -1);
+					this.killed=true;
+					gbox.playAudio("die-sound");
+					//toys.generate.sparks.bounceDie(this, "sparks", null, {jump: 1, flipv: false});
+					maingame.playerDied({wait:1});				
+				},
 				first:function(){
 					this.counter=(this.counter+1)%10;
 					toys.platformer.applyGravity(this); // Apply gravity
@@ -205,6 +221,7 @@
 			gbox.addObject({
 					group:"enemies",
 					tileset:type,
+					score:50,
 					initialize:function() {
 						toys.platformer.initialize(this, {
 							frames:{
@@ -241,11 +258,14 @@
 						if (player.collisionEnabled())
 						    if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
 								gbox.playAudio("hit-sound");
+								maingame.hud.addValue("score", "value", this.score);
 							    gbox.trashObject(this); // Remove this enemy
 							    toys.platformer.bounce(player,{jumpsize:20});
+								toys.generate.sparks.popupText(this, "sparks", null, {font: "big", jump: 6, text: this.score + " points!", keep: 10});
 						    }else
-						    if(helpers.didCollide(this,player,2))
-							helpers.kill(); //Kill the player	
+						    if(helpers.didCollide(this,player,2)) {
+								player.kill(); //Kill the player		
+								}
 					},
 					blit:function() {
 						if (gbox.objectIsVisible(this))
@@ -261,12 +281,13 @@
 					}
 				});
 		}
-	
+	zzzzzzzzzzzzz
 		function addBoss(type, data)
 		{
 			gbox.addObject({
 					group:"boss",
 					tileset:type,
+					score:200,
 					initialize:function() {
 						toys.platformer.initialize(this, {
 							frames:{
@@ -302,11 +323,16 @@
 						//Check if enemy or players is dead
 						if (player.collisionEnabled())
 						    if(help.isSquished(this,player)) { // isSquished finds out if object is being jumped on
-							    gbox.trashObject(this); // Remove this enemy
+								gbox.playAudio("hit-sound");
+								maingame.hud.addValue("score", "value", this.score);							   
+							   gbox.trashObject(this); // Remove this enemy
 							    toys.platformer.bounce(player,{jumpsize:20});
+								toys.generate.sparks.popupText(this, "sparks", null, {font: "big", jump: 6, text: this.score + " POINTS!", keep: 10});
 						    }else
-						    if(helpers.didCollide(this,player,2))
-							helpers.kill(); //Kill the player	
+						    if(helpers.didCollide(this,player,2)){
+							numberOfLives = numberOfLives - 1;
+							player.kill(); //Kill the player	
+							}
 					},
 					blit:function() {
 						if (gbox.objectIsVisible(this))
