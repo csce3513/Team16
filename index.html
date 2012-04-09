@@ -139,7 +139,7 @@
 				{
 					addBoss(type,data);
 				}
-			}
+			};
 			
 		    maingame.initializeGame = function() {
 				numberOfLives = helpers.getNumberOfLives((maingame.difficulty));
@@ -150,6 +150,10 @@
 		    	addPlayer();
 		    	addBackground();
 		    };		
+			
+			maingame.gameIsOver = function() {
+			return maingame.hud.getValue("lives", "value")  ===  0;
+			};
 			
 		    gbox.go();
 		}
@@ -275,8 +279,9 @@
 							    toys.platformer.bounce(player,{jumpsize:20});
 								toys.generate.sparks.popupText(this, "sparks", null, {font: "big", jump: 6, text: this.score + " points!", keep: 10});
 						    }else
-						    if(helpers.didCollide(this,player,2))
-							helpers.kill(); //Kill the player	
+						    if(helpers.didCollide(this,player,2)){
+							player.kill(); //Kill the player	
+							}
 					},
 					blit:function() {
 						if (gbox.objectIsVisible(this))
@@ -340,8 +345,9 @@
 							    toys.platformer.bounce(player,{jumpsize:20});
 								toys.generate.sparks.popupText(this, "sparks", null, {font: "big", jump: 6, text: this.score + " points!", keep: 10});
 						    }else
-						    if(helpers.didCollide(this,player,2))
-							helpers.kill(); //Kill the player	
+						    if(helpers.didCollide(this,player,2)){
+							player.kill(); //Kill the player	
+							}
 					},
 					blit:function() {
 						if (gbox.objectIsVisible(this))
