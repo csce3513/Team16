@@ -183,7 +183,7 @@
 					this.killed=true;
 					gbox.playAudio("die-sound");
 					toys.generate.sparks.bounceDie(this, "sparks", null, {jump: 5, flipv: false});
-					maingame.playerDied({wait:1});				
+					maingame.playerDied({wait:50});				
 				},
 				first:function(){
 					this.counter=(this.counter+1)%10;
