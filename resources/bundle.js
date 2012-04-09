@@ -27,7 +27,7 @@
 		{id:"tiger-boss",image:"sprites",tileh:55,tilew:30,tilerow:3,gapx:0,gapy:111},
 		{id:"crimson-tide",image:"sprites",tileh:25,tilew:40,tilerow:3,gapx:0,gapy:75},
 		{id:"crimson-boss",image:"sprites",tileh:56,tilew:31,tilerow:3,gapx:0,gapy:166},
-		{id:"florida-gator",image:"sprites",tileh:11,tilew:48,tilerow:3,gapx:0,gapy:100},
+		{id:"florida-gator",image:"sprites",tileh:13,tilew:48,tilerow:3,gapx:0,gapy:100},
 		{id:"florida-boss",image:"sprites",tileh:54,tilew:30,tilerow:3,gapx:0,gapy:221},
 		{id:"tiledfont",image:"font",tileh:8,tilew:8,tilerow:255,gapx:0,gapy:8}
 	],
