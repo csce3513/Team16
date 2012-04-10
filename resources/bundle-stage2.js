@@ -4,16 +4,21 @@
 		{
 			object:"mapmeta",
 			property:"stage2",
-			value:{}
+			value:{nextLevel:"stage3"}
 		},
 		{
 			object:"mapobjects",
 			property:"stage2",
 			value:{
 				items:[
-					{objecttype:"player", x:40, y:180, side:1},
-					{objecttype:"elephant", x:125, y:180, side:1},
-					{objecttype:"tiger-boss", x: 326, y:180, side:1}
+					{objecttype:"player", x:0, y:594, side:1},
+					{objecttype:"crimson-tide", x:220, y:534},
+					{objecttype:"crimson-tide", x:60, y:400},
+					{objecttype:"crimson-tide", x:200, y:400},
+					{objecttype:"crimson-tide", x:260, y:300},
+					{objecttype:"crimson-tide", x:280, y:200},
+					{objecttype:"crimson-tide", x:180, y:200},
+					{objecttype:"crimson-boss", x:20, y:40}
 				]
 			}
 		},
@@ -23,18 +28,42 @@
 			value:help.finalizeTilemap({
 				tileset:"tiles",
 				map:[
-					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,4,3,4,null,null,null,null,null,null,null],
-					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,5,3,4,4,4,4,null,3,null,null],
-					[null,null,null,null,null,0,0,0,0,null,null,null,null,null,null,0,null,null,null,null,null,null,null,null,null,null,null,5,5,null,null,null,3,1,3,null,null,null,null,0,null,1,null,1,null,null,6,5,4,5,4,3,3,null,null,null,null],
-					[null,null,null,4,5,0,null,null,null,null,0,0,0,0,null,null,null,0,0,0,0,0,0,0,0,0,null,0,0,0,0,null,0,null,1,null,null,null,null,0,0,0,0,0,null,null,0,6,null,null,0,null,0,0,0,null,null],
-					[null,null,null,0,null,0,null,null,null,null,0,4,null,0,null,0,null,0,null,0,null,0,0,null,null,null,null,0,null,null,0,null,0,0,0,0,null,null,null,null,null,0,1,1,1,null,null,null,null,null,0,null,0,null,null,null,null],
-					[null,null,4,0,null,0,null,4,null,null,0,5,null,null,null,0,null,0,null,0,null,0,0,0,0,0,null,0,null,null,0,null,0,null,1,0,1,1,1,null,null,0,null,null,1,6,0,null,0,0,0,null,0,0,0,null,null],
-					[null,null,null,null,null,0,null,null,null,null,0,5,null,null,null,0,null,0,6,null,null,0,5,null,null,0,null,0,3,null,0,null,0,null,null,0,1,null,1,null,null,0,null,null,null,null,0,null,0,null,0,null,0,null,null,null,null],
-					[null,null,0,0,null,0,0,0,0,null,0,4,4,null,null,0,null,0,null,null,null,0,null,0,0,0,null,0,0,0,0,6,0,6,null,0,1,1,1,1,null,0,null,null,null,null,0,null,0,0,0,null,0,0,0,null,null],
-					[null,null,null,null,null,null,null,null,null,null,3,5,3,null,null,null,null,null,null,null,null,null,null,null,6,5,null,5,1,6,1,null,null,null,null,null,1,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-					[null,null,null,null,null,null,null,null,null,3,3,5,3,3,null,null,null,null,null,null,null,null,5,null,5,5,null,null,1,1,1,null,null,null,null,null,1,null,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,3,null],
-					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[3,null,null,null,null,null,null,null,null,null,null,null,null,3,null,null],
+					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,null],
+					[0,0,0,0,0,0,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,0],
+					[null,null,null,null,null,null,null,null,null,0,0,0,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,0,0,0,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,1,1,1,1,null,1,1,1,1,1,1,1,1,1],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[6,6,null,null,6,6,null,null,6,null,null,6,6,6,6,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,3],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,3,3],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,3,3,3],
+					[null,null,6,6,6,6,null,null,3,3,3,3,3,3,3,3],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[6,6,6,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,4,5,4,5,4,5,4,5,4,0,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,0,null,null,0],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,0,0],
+					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 				]
 			})
 		}

@@ -3,9 +3,9 @@ var helpers={
 	// CONSTANTS
 	getNumberOfLives:function(levelDifficulty){
 		if(levelDifficulty == 0)
-			return 10;
+			return 6;
 		if(levelDifficulty == 1)
-			return 5;
+			return 3;
 		return 1;
 	},	
 	isGameOver:function(numberOfLives){
@@ -22,12 +22,6 @@ var helpers={
 		if(isPlayerTouchingEnemyWithFeet)
 			return false;
 		return true;
-	},
-	kill:function(){
-		maingame.playerDied({wait:1});
-		var player = gbox.getObject("player","player");
-		player.killed=true;
-		
 	},
 	didCollide:function(o1,o2,t) {//Checks to see if 2 objects collied based on their x and w location 
 		if (!t) t=0;
