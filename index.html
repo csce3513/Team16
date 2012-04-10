@@ -153,7 +153,7 @@
 		    };		
 			
 			maingame.gameIsOver = function() {
-			return maingame.hud.getValue("lives", "value")  ===  0;
+				return maingame.hud.getValue("lives", "value")  ==  0;
 			};
 			
 		    gbox.go();
@@ -182,9 +182,9 @@
 				kill:function(){
 					maingame.hud.addValue("lives", "value", -1);
 					this.killed=true;
-					gbox.playAudio("die-sound");
+					gbox.hitAudio("die-sound");
 					toys.generate.sparks.bounceDie(this, "sparks", null, {jump: 5, flipv: false});
-					maingame.playerDied({wait:1});				
+					maingame.playerDied({wait:50});				
 				},
 				first:function(){
 					this.counter=(this.counter+1)%10;
@@ -205,7 +205,8 @@
 					// Render the current sprite.. don't worry too much about what's going on here. We're pretty much doing
 					//  the default drawing function, sending along the tileset, the frame info, coordinates, whether the
 					//  spries is flipped, camera info, and the alpha transparency value
-					gbox.blitTile(gbox.getBufferContext(), {
+					if (!this.killed)
+						gbox.blitTile(gbox.getBufferContext(), {
 							tileset: this.tileset,
 							tile:    this.frame,
 							dx:      this.x,
@@ -213,7 +214,7 @@
 							camera:  this.camera,
 							fliph:   this.side,
 							flipv:   this.flipv
-					});							
+						});							
 				}		
 			});
 		}
