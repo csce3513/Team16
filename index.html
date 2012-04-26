@@ -119,10 +119,8 @@
 				
 			};
 			
-			maingame.gameEvents = function() {
-				if(mapmeta[currentstage].mapType == "boss")
-					if(helpers.areEnemiesDead())
-						helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage);
+			maingame.gameEvents = function() {				
+				helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage, tilemaps);				
 						
 			};
 			
@@ -205,9 +203,7 @@
 						// Multiplier reset
 						if (this.touchedfloor) this.multiplier=0;
 						
-						var tilePlayerIsTouching = help.getTileInMap(this.x,this.y,tilemaps[currentstage],0);
-						if(tilePlayerIsTouching > 6)
-							helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage);
+						
 					}
 				},
 				blit:function(){ 

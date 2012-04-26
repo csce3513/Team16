@@ -31,7 +31,13 @@ var gbox ={
 		if(enemyCount==0)
 			return true;
 		return false;
-	}
+	},
+	
+	getObject:function(){}
+}
+
+var help ={
+	getTileInMap:function(){}
 }
 
 var gamecycle={

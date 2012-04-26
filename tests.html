@@ -74,12 +74,14 @@
 	  currentstage = helpers.setStage(null);
 	  equal(currentstage, "stage1", "null value should return stage1");
 	});
+	
 	module("Check Audio");
 	test("Check to see if proper audio files are present and load", function() {	  
 	  var isAudio = helpers.checkAudio("testaudio");
 	  equal(isAudio, true, "Function should return True if audio files are loaded");
 	  
 	});
+	
 	module("Background Tiles");
 	test("if the player is touching an enemy with the feet then he dies", function() {
 	  var actual = helpers.isPlayerDead(true);	  
@@ -118,38 +120,7 @@
 		 var actual = helpers.areEnemiesDead();
 		 equal(actual, false);
 	});
-		
-    test("Calling helpers.checkIfGameIsCompleted() sets gamestate to 800 if game is won ", function() {
-    	 var currentstage = "stage1";		 
-		 var mapmeta = new Array();
-		 mapmeta[currentstage] = new Object();		 
-		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
-    	 gbox.groupIsEmpty = function(group){return true;};
-    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
-    	 var actual = maingame.state;
-    	 equal(actual, 800);
-    	 
-    });
-	test("Calling helpers.checkIfGameIsCompleted() sets gamestate to 400 if game is going to next level", function() {
-    	 var currentstage = "stage1";		 
-		 var mapmeta = new Array();
-		 mapmeta[currentstage] = new Object();	
-		 mapmeta[currentstage].nextLevel = "stage2";
-		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
-    	 gbox.groupIsEmpty = function(group){return true;};
-    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
-    	 var actual = maingame.state;
-    	 equal(actual, 400, "State is 400 when moving onto the next level");    	 
-    });
-    test("Calling helpers.checkIfGameIsCompleted() leaves gamestate at 50 if player hasnt won the level yet", function() {    	 
-		 var currentstage = "stage1";		 
-		 var mapmeta = new Array();
-		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');    	 
-    	 gbox.groupIsEmpty = function(group){return false;};
-    	 helpers.areEnemiesDead(); 
-    	 var actual = maingame.state;
-    	 equal(actual, 50, "State is 50 when game state is not changing");    	 
-    });    
+	
     module("Change Level");
 	test("Calling the maingame.changeLevel function changes level", function() {	  
 	  var currentstage = helpers.setStage("stage2");
@@ -158,8 +129,93 @@
 	  equal(currentstage, "stage1", "null value should return stage1");
 	});
 	
-    
-  });
+	module("When the player is playing a normal level");
+	test("Calling helpers.checkIfGameIsCompleted() leaves the game state at 50 ", function() {
+    	 var currentstage = "stage1";
+		  var mapmeta = new Array();
+		  
+		  mapmeta[currentstage] = new Object();	
+		  mapmeta[currentstage].mapType = "normal";
+		  
+		  var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+		  gbox.getObject = function(group, id){return {x:1,y:1};};
+		  help.getTileInMap = function(x,y,data,s1){return 5;};
+		  
+		  helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage, {property:"stage1"}); 
+		  var actual = maingame.state;
+		  
+		  equal(actual, 50, "State is 50 when level doesn't change");    
+    	 
+    });
+	test("and they touch the flag then the state goes to 400", function() {
+    	 var currentstage = "stage1";
+		  var mapmeta = new Array();
+		  
+		  mapmeta[currentstage] = new Object();	
+		  mapmeta[currentstage].nextLevel = "stage2";
+		  mapmeta[currentstage].mapType = "normal";
+		  
+		  var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+		  var tilemaps = new Object();
+		  
+		  gbox.getObject = function(group, id){return {x:1,y:1};};
+		  help.getTileInMap = function(x,y,data,s1){return 7;};
+		  
+		  helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage, {property:"stage1"}); 
+		  var actual = maingame.state;
+    	  
+		  equal(actual, 400, "State is 400 when moving onto the next level");    	 
+    });
+	
+	module("When the player is playing the boss level");
+    test("and he hasn't won yet, calling helpers.checkIfGameIsCompleted leaves gamestate at 50", function() {    	 
+		  var currentstage = "stage1boss";
+		  var mapmeta = new Array();
+		  
+		  mapmeta[currentstage] = new Object();	
+		  mapmeta[currentstage].mapType = "boss";
+		  
+		  var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+		  gbox.groupIsEmpty = function(group){return false;};
+		  helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage, null); 
+		  var actual = maingame.state;
+		  
+		  equal(actual, 50, "State is 50 when level doesn't change");      	 
+    });  
+	
+	module("When the player beats a boss level (not the last boss level)");
+	test("sets gamestate to 400", function() {	  
+	  var currentstage = "stage1boss";
+	  var mapmeta = new Array();
+	  
+	  mapmeta[currentstage] = new Object();	
+	  mapmeta[currentstage].nextLevel = "stage2";
+	  mapmeta[currentstage].mapType = "boss";
+	  
+	  var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+	  gbox.groupIsEmpty = function(group){return true;};
+	  helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage, null); 
+	  var actual = maingame.state;
+	  
+	  equal(actual, 400, "State is 400 when moving onto the next level");  
+	});
+    	
+	module("When the player beats the last boss level");
+	test("the gamestate is set to 800", function() {
+		var currentstage = "stage1boss";
+		var mapmeta = new Array();
+		
+		mapmeta[currentstage] = new Object();	
+		mapmeta[currentstage].mapType = "boss";
+		
+		var maingame = gamecycle.createMaingame('gamecycle','gamecycle');
+		gbox.groupIsEmpty = function(group){return true;};
+		helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage, null); 
+		var actual = maingame.state;
+		
+		equal(actual, 800, "State is 800 when moving onto the next level"); 
+		});
+    });
   </script>
   
 </head>

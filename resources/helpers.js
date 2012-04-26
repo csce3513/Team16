@@ -50,15 +50,31 @@ var helpers={
 			return "stage1";
 		return level;
 	},
-	checkIfGameIsCompleted:function(maingame, mapmeta, currentstage){
-			if(mapmeta[currentstage].nextLevel != null)
-				maingame.gotoLevel(mapmeta[currentstage].nextLevel);
-			else
-				maingame.gameIsCompleted();
+	checkIfGameIsCompleted:function(maingame, mapmeta, currentstage, tilemaps){
+			if(mapmeta[currentstage].mapType == "boss")
+			{
+				if(helpers.areEnemiesDead())
+					helpers.goToNextLevel(maingame, mapmeta, currentstage);
+			}
+			else // Normal level
+			{
+				var player = gbox.getObject('player', 'player');
+				var tilePlayerIsTouching = help.getTileInMap(player.x,player.y,tilemaps[currentstage],0);
+					if(tilePlayerIsTouching > 6) // If greater than 6, then player is touching a flag tile
+						helpers.goToNextLevel(maingame, mapmeta, currentstage);
+			}
+			
 	},
 	areEnemiesDead:function(){		
 		return gbox.groupIsEmpty("boss")
-	}
+	},
+	goToNextLevel:function(maingame, mapmeta, currentstage){
+		if(mapmeta[currentstage].nextLevel != null)
+			maingame.gotoLevel(mapmeta[currentstage].nextLevel);
+		else
+			maingame.gameIsCompleted();
+	},
+	
 	
 }
 

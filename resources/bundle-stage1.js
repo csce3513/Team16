@@ -4,7 +4,7 @@
 		{
 			object:"mapmeta",
 			property:"stage1",
-			value:{mapType:"normal"}
+			value:{nextLevel:"stage1boss",mapType:"normal"}
 		},
 		{
 			object:"mapobjects",
