@@ -146,7 +146,7 @@
 		 var mapmeta = new Array();
 		 var maingame = gamecycle.createMaingame('gamecycle','gamecycle');    	 
     	 gbox.groupIsEmpty = function(group){return false;};
-    	 helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage); 
+    	 helpers.areEnemiesDead(); 
     	 var actual = maingame.state;
     	 equal(actual, 50, "State is 50 when game state is not changing");    	 
     });    

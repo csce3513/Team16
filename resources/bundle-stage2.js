@@ -4,7 +4,7 @@
 		{
 			object:"mapmeta",
 			property:"stage2",
-			value:{nextLevel:"stage3"}
+			value:{nextLevel:"stage3",mapType:"normal"}
 		},
 		{
 			object:"mapobjects",
@@ -17,8 +17,7 @@
 					{objecttype:"crimson-tide", x:200, y:400},
 					{objecttype:"crimson-tide", x:260, y:300},
 					{objecttype:"crimson-tide", x:280, y:200},
-					{objecttype:"crimson-tide", x:180, y:200},
-					{objecttype:"crimson-boss", x:20, y:40}
+					{objecttype:"crimson-tide", x:180, y:200}
 				]
 			}
 		},
@@ -30,11 +29,11 @@
 				map:[
 					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
 					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-					[3,null,null,null,null,null,null,null,null,null,null,null,null,3,null,null],
+					[7,8,11,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,10,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,10,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,10,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[3,null,9,null,null,null,null,null,null,null,null,null,null,3,null,null],
 					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,null],
 					[0,0,0,0,0,0,null,null,null,null,null,null,null,null,null,null],
 					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],

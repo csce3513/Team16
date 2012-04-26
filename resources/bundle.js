@@ -22,7 +22,7 @@
 	],
 	addTiles:[
 		{id:"player",image:"sprites",tileh:35,tilew:20,tilerow:3,gapx:0,gapy:40},
-		{id:"tiles",image:"sprites",tileh:20,tilew:20,tilerow:9,gapx:0,gapy:0},
+		{id:"tiles",image:"sprites",tileh:20,tilew:20,tilerow:12,gapx:0,gapy:0},
 		{id:"lsu-tiger",image:"sprites",tileh:20,tilew:20,tilerow:3,gapx:0,gapy:20},
 		{id:"tiger-boss",image:"sprites",tileh:55,tilew:30,tilerow:3,gapx:0,gapy:111},
 		{id:"crimson-tide",image:"sprites",tileh:25,tilew:40,tilerow:3,gapx:0,gapy:75},
@@ -33,7 +33,8 @@
 	],
 	addBundle:[
 		{file:"resources/bundle-stage1.js"},
+		{file:"resources/bundle-stage1boss.js"},
 		{file:"resources/bundle-stage2.js"},
-				{file:"resources/bundle-stage3.js"}
+		{file:"resources/bundle-stage3.js"}
 	]
 }

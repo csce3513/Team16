@@ -51,13 +51,10 @@ var helpers={
 		return level;
 	},
 	checkIfGameIsCompleted:function(maingame, mapmeta, currentstage){
-		if (this.areEnemiesDead())
-		{			
 			if(mapmeta[currentstage].nextLevel != null)
 				maingame.gotoLevel(mapmeta[currentstage].nextLevel);
 			else
 				maingame.gameIsCompleted();
-		}
 	},
 	areEnemiesDead:function(){		
 		return gbox.groupIsEmpty("boss")

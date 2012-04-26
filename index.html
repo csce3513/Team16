@@ -44,7 +44,7 @@
 		
 		function main()
 		{
-		    gbox.setGroups(['background','player','enemies','boss','sparks','gamecycle']);
+		    gbox.setGroups(['background','player','enemies','boss','flags','sparks','gamecycle']);
 			gbox.setAudioChannels({bgmusic: {volume: 0.4}, sfx: {volume: 1.0}});
 		    maingame = gamecycle.createMaingame('gamecycle', 'gamecycle');
 		   
@@ -120,7 +120,10 @@
 			};
 			
 			maingame.gameEvents = function() {
-				helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage);
+				if(mapmeta[currentstage].mapType == "boss")
+					if(helpers.areEnemiesDead())
+						helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage);
+						
 			};
 			
 			maingame.addEnemy = function(type, data) {
@@ -135,7 +138,7 @@
 				else if(type == "florida-gator")
 				{
 					addSmallEnemy(type, data);
-				}
+				}					
 				else
 				{
 					addBoss(type,data);
@@ -187,19 +190,25 @@
 					maingame.playerDied({wait:50});				
 				},
 				first:function(){
-					this.counter=(this.counter+1)%10;
-					toys.platformer.applyGravity(this); // Apply gravity
-					toys.platformer.horizontalKeys(this,{left:"left",right:"right"}); // Moves horizontally
-					toys.platformer.verticalTileCollision(this,tilemaps[currentstage],"map"); // vertical tile collision (i.e. floor)
-					toys.platformer.horizontalTileCollision(this,tilemaps[currentstage],"map"); // horizontal tile collision (i.e. walls)
-					toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump-sound"}); // handle jumping					
-					toys.platformer.handleAccellerations(this); // gravity/attrito
-					toys.platformer.setSide(this); // set horizontal side
-					toys.platformer.setFrame(this); // set the right animation frame					
-					
-					// Multiplier reset
-					if (this.touchedfloor) this.multiplier=0;
-					
+					if(!this.killed&&!maingame.gameIsHold())
+					{
+						this.counter=(this.counter+1)%10;
+						toys.platformer.applyGravity(this); // Apply gravity
+						toys.platformer.horizontalKeys(this,{left:"left",right:"right"}); // Moves horizontally
+						toys.platformer.verticalTileCollision(this,tilemaps[currentstage],"map"); // vertical tile collision (i.e. floor)
+						toys.platformer.horizontalTileCollision(this,tilemaps[currentstage],"map"); // horizontal tile collision (i.e. walls)
+						toys.platformer.jumpKeys(this,{jump:"a",audiojump:"jump-sound"}); // handle jumping					
+						toys.platformer.handleAccellerations(this); // gravity/attrito
+						toys.platformer.setSide(this); // set horizontal side
+						toys.platformer.setFrame(this); // set the right animation frame					
+						
+						// Multiplier reset
+						if (this.touchedfloor) this.multiplier=0;
+						
+						var tilePlayerIsTouching = help.getTileInMap(this.x,this.y,tilemaps[currentstage],0);
+						if(tilePlayerIsTouching > 6)
+							helpers.checkIfGameIsCompleted(maingame, mapmeta, currentstage);
+					}
 				},
 				blit:function(){ 
 					// Render the current sprite.. don't worry too much about what's going on here. We're pretty much doing
@@ -365,6 +374,7 @@
 					}
 				});
 		}
+	
 	</script>
 </body>
 </html>
