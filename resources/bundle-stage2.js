@@ -12,7 +12,13 @@
 			value:{
 				items:[
 					{objecttype:"player", x:0, y:594, side:1},
-					{objecttype:"crimson-tide", x:180, y:200}
+					
+					{objecttype:"crimson-tide", x:220, y:534},
+					{objecttype:"crimson-tide", x:60, y:400},
+					{objecttype:"crimson-tide", x:200, y:400},
+					{objecttype:"crimson-tide", x:260, y:300},
+					{objecttype:"crimson-tide", x:280, y:200},
+					{objecttype:"crimson-tide", x:180, y:200}	
 				]
 			}
 		},
