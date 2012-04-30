@@ -1,10 +1,10 @@
-{
+	{
 	_template:"leavemealone",
 	setObject:[
 		{
 			object:"mapmeta",
 			property:"stage3",
-			value:{mapType:"normal"}
+			value:{nextLevel:"stage3boss",mapType:"normal"}
 		},
 		{
 			object:"mapobjects",

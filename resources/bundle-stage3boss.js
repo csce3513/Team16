@@ -1,0 +1,42 @@
+{
+	_template:"leavemealone",
+	setObject:[
+		{
+			object:"mapmeta",
+			property:"stage3boss",
+			value:{nextLevel:"stage4",mapType:"boss"}
+		},
+		{
+			object:"mapobjects",
+			property:"stage3boss",
+			value:{
+				items:[
+					{objecttype:"player", x:20, y:10, side:1},
+					{objecttype:"florida-boss", x:160, y:30}
+				]
+			}
+		},
+		{
+			object:"tilemaps",
+			property:"stage3boss",
+			value:help.finalizeTilemap({
+				tileset:"tiles",
+map:[
+					[4,5,4,5,4,5,4,5,4,5,4,5,4,5,4,4],
+					[4,null,null,null,null,null,null,null,null,null,null,null,null,null,null,4],
+					[4,null,null,null,null,null,null,null,null,null,null,null,null,null,null,4],
+					[4,null,null,null,null,null,null,null,null,null,null,null,null,null,null,4],
+					[4,null,null,null,null,null,null,null,null,null,null,null,null,null,null,4],
+					[4,null,null,null,null,null,null,null,null,null,null,null,null,null,null,4],
+					[4,null,null,null,null,null,null,null,null,null,null,null,null,null,null,4],
+					[4,null,null,null,null,null,5,4,5,4,null,null,null,null,null,4],
+					[4,null,null,null,null,4,5,4,5,4,5,null,null,null,null,4],
+					[4,null,null,5,4,5,4,5,4,5,4,5,null,null,null,4],
+					[4,null,4,5,4,5,4,5,4,5,4,5,4,3,3,4],
+					[4,5,4,5,4,5,4,5,4,5,4,5,4,5,5,4]
+					
+				]
+			})
+		}
+	]
+}

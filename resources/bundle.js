@@ -2,9 +2,12 @@
 	// Graphic resources.
 	addImage:[
 		["sprites","resources/sprites.png"],
+		["sprites2","resources/sprites2.png"],
 		["bg","resources/bg1.png"],	
 		["bg2","resources/bg2.png"],
 		["bg3","resources/bg3.png"],
+		["bg4","resources/bg4.png"],
+		["bg4Boss","resources/bg4Boss.png"],
 		["font","resources/font.png"],	
 		["fontbig","resources/fontbig.png"],		
 		["logo","resources/logo.png"]
@@ -29,12 +32,18 @@
 		{id:"crimson-boss",image:"sprites",tileh:56,tilew:31,tilerow:3,gapx:0,gapy:166},
 		{id:"florida-gator",image:"sprites",tileh:13,tilew:48,tilerow:3,gapx:0,gapy:100},
 		{id:"florida-boss",image:"sprites",tileh:54,tilew:30,tilerow:3,gapx:0,gapy:221},
+		{id:"georgia-dog",image:"sprites2",tileh:19,tilew:34,tilerow:3,gapx:0,gapy:332},
+		{id:"georgia-boss",image:"sprites2",tileh:54,tilew:28,tilerow:3,gapx:0,gapy:278},
 		{id:"tiledfont",image:"font",tileh:8,tilew:8,tilerow:255,gapx:0,gapy:8}
 	],
 	addBundle:[
 		{file:"resources/bundle-stage1.js"},
 		{file:"resources/bundle-stage1boss.js"},
 		{file:"resources/bundle-stage2.js"},
-		{file:"resources/bundle-stage3.js"}
+		{file:"resources/bundle-stage2boss.js"},
+		{file:"resources/bundle-stage3.js"},
+		{file:"resources/bundle-stage3boss.js"},
+		{file:"resources/bundle-stage4.js"},
+		{file:"resources/bundle-stage4boss.js"}
 	]
 }

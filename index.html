@@ -83,6 +83,12 @@
 					scene = "bg2";
 				else if(currentstage == "stage3")
 					scene = "bg3";
+				else if(currentstage == "stage3boss")
+					scene = "bg3";
+				else if(currentstage == "stage4")
+					scene = "bg4";
+				else if(currentstage == "stage4boss")
+					scene = "bg4Boss";
 				else
 					scene = "bg";
 				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
@@ -136,7 +142,11 @@
 				else if(type == "florida-gator")
 				{
 					addSmallEnemy(type, data);
-				}					
+				}
+				else if(type == "georgia-dog")
+				{
+					addSmallEnemy(type, data);
+				}
 				else
 				{
 					addBoss(type,data);

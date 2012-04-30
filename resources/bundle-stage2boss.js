@@ -1,0 +1,43 @@
+{
+	_template:"leavemealone",
+	setObject:[
+		{
+			object:"mapmeta",
+			property:"stage2boss",
+			value:{nextLevel:"stage3",mapType:"boss"}
+		},
+		{
+			object:"mapobjects",
+			property:"stage2boss",
+			value:{
+				items:[
+					{objecttype:"player", x:0, y:0, side:1},
+					{objecttype:"crimson-boss", x:280, y:180}
+				]
+			}
+		},
+		{
+			object:"tilemaps",
+			property:"stage2boss",
+			value:help.finalizeTilemap({
+				tileset:"tiles",
+				map:[
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[0,0,0,0,0,0,0,null,0,0,0,0,0,0,0,0],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+					[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+				]
+			})
+		}
+	]
+}
