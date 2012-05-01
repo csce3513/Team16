@@ -7,7 +7,7 @@
 		["bg2","resources/bg2.png"],
 		["bg3","resources/bg3.png"],
 		["bg4","resources/bg4.png"],
-		["bg4Boss","resources/bg1.png"],
+		["bg4Boss","resources/bg4Boss.png"],
 		["intro1","resources/bg1.png"],
 		["intro2","resources/bg1.png"],
 		["intro3","resources/bg1.png"],
