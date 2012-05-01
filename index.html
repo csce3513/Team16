@@ -19,6 +19,9 @@
 		//Create the Game Variable
 		var maingame;
 		var numberOfLives;
+		var TIME_LIMIT = 10;
+		var timeStarted;
+		var secondsElapsed;
 		var dialogues={}; // Loaded by external resources. Must be global.
 		var tilemaps={}; // Loaded by external resources. Must be global.
 		var mapmeta={}; // Loaded by external resources. Must be global.
@@ -47,6 +50,28 @@
 		    gbox.setGroups(['background','player','enemies','boss','flags','sparks','gamecycle']);
 			gbox.setAudioChannels({bgmusic: {volume: 0.4}, sfx: {volume: 1.0}});
 		    maingame = gamecycle.createMaingame('gamecycle', 'gamecycle');
+			
+			// Game intro
+
+			maingame.gameIntroAnimation=function(reset){
+				if (reset) {
+					toys.resetToy(this,"intro-animation");
+				} else {
+					gbox.blitFade(gbox.getBufferContext(),{alpha:1});
+					return toys.dialogue.render(this,"intro-animation",dialogues.intro);
+				}
+			  }
+
+			  // Game ending
+			maingame.gameEndingIntroAnimation=function(reset){
+				if (reset) {
+					toys.resetToy(this,"intro-animation");
+					maingame.hud.hideWidgets(["level","lives","time_left"]); // Hides the timer and the stage label for the ending
+				} else {
+					gbox.blitFade(gbox.getBufferContext(),{alpha:1});
+					return toys.dialogue.render(this,"intro-animation",dialogues.ending);
+				}
+			  }
 		   
 		    maingame.gameTitleIntroAnimation=function(reset){
 				if (reset)
@@ -154,11 +179,13 @@
 			};
 			
 		    maingame.initializeGame = function() {
+				timeStarted = (new Date()).getTime();
 				numberOfLives = helpers.getNumberOfLives((maingame.difficulty));
 				maingame.hud.setWidget("label", {widget: "label", font: "small", value: "LIVES", dx: 1, dy: 10, clear: true});
 				maingame.hud.setWidget("score", {widget: "label", font: "small", value: 0, dx: 50, dy: 5, prepad: 10, padwith: " ", clear: true});
 				maingame.hud.setWidget("lives", {widget: "symbols", minvalue: 0, value: numberOfLives, maxshown: 6, tileset: "tiledfont", tiles: [10], dx: 42, dy: 10, gapx: 8, gapy: 0});
 				maingame.hud.setWidget("stage", {widget: "label", font: "small", value: "", postpad: 7, padwith: " ", dx: 0, dy: gbox.getScreenH()-3, clear: true});
+				maingame.hud.setWidget('time_left', {widget: 'label', font: 'small', value: 30, dx: gbox.getScreenW() - 40, dy: 25, clear: true});
 		    	addPlayer();
 		    	addBackground();
 		    };		
@@ -170,6 +197,26 @@
 		    gbox.go();
 		}
 		
+	function addMap() {
+		gbox.addObject({
+			blit: function() {
+					  // Figure out how many seconds have elapsed since the game started
+					  //  we divide by 1000 because the number given is in milliseconds
+					  secondsElapsed = ((new Date()).getTime() - timeStarted) / 1000;
+				 
+					  // Calculate the number of full seconds that have passed, subtract that
+					  //  from the total number of seconds the player must survive, and
+					  //  update the timer HUD element with that value, then tell the HUD to redraw
+					  maingame.hud.setValue('time_left', 'value', Math.ceil(TIME_LIMIT - secondsElapsed));
+					  maingame.hud.redraw();
+				 
+					  // If we're reached our TIME_LIMIT, show the victory screen
+					  if (secondsElapsed >= TIME_LIMIT)
+						gameOverWin();
+			}
+		});
+	}
+	
 		function addPlayer() {
 			gbox.addObject({
 				id:'player',
