@@ -77,12 +77,25 @@
 		  			}
 		  		},
 		  		scenes:[
+				{
+		  				slide:{
+		  					image:"ending1",
+		  					x:0,
+		  					y:40
+		  				},
+		  				speed:1,
+		  				who:"narrator",
+		  				audio:"beep",
+		  				talk:[
+		  					"           Congratulations!         "
+		  				]
+		  			},
 		  			{
 		  				font:"small",
 		  				speed:2,
 		  				spacing:2,
 		  				push:gbox.getScreenHH(),
-		  				audiomusic:"ending",
+		  				audiomusic:"beep",
 		  				scroller:[
 		  					"Arkansas Rumble",
 		  					"An Awesome Game",
