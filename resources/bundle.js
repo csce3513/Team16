@@ -7,7 +7,11 @@
 		["bg2","resources/bg2.png"],
 		["bg3","resources/bg3.png"],
 		["bg4","resources/bg4.png"],
-		["bg4Boss","resources/bg4Boss.png"],
+		["bg4Boss","resources/bg1.png"],
+		["intro1","resources/bg1.png"],
+		["intro2","resources/bg1.png"],
+		["intro3","resources/bg1.png"],
+		["ending1","resources/bg1.png"],
 		["font","resources/font.png"],	
 		["fontbig","resources/fontbig.png"],		
 		["logo","resources/logo.png"]
@@ -37,6 +41,7 @@
 		{id:"tiledfont",image:"font",tileh:8,tilew:8,tilerow:255,gapx:0,gapy:8}
 	],
 	addBundle:[
+		{file:"resources/bundle-dialogues.js"},
 		{file:"resources/bundle-stage1.js"},
 		{file:"resources/bundle-stage1boss.js"},
 		{file:"resources/bundle-stage2.js"},
