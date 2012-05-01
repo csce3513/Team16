@@ -4,7 +4,7 @@
 		{
 			object:"mapmeta",
 			property:"stage4boss",
-			value:{mapType:"boss"}
+			value:{nextLevel:"finalstage",mapType:"boss"}
 		},
 		{
 			object:"mapobjects",

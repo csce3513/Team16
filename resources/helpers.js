@@ -47,7 +47,7 @@ var helpers={
 	setStage:function(level){
 		// If level is null then return 'stage1' else return the level passed in
 		if (level == null)
-			return "stage1";
+			return "stage2boss";
 		return level;
 	},
 	checkIfGameIsCompleted:function(maingame, mapmeta, currentstage, tilemaps){

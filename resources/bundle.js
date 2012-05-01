@@ -3,11 +3,13 @@
 	addImage:[
 		["sprites","resources/sprites.png"],
 		["sprites2","resources/sprites2.png"],
+		["sprites3","resources/sprites3.png"],
 		["bg","resources/bg1.png"],	
 		["bg2","resources/bg2.png"],
 		["bg3","resources/bg3.png"],
 		["bg4","resources/bg4.png"],
 		["bg4Boss","resources/bg4Boss.png"],
+		["finalstageBG","resources/finalLevelBG.png"],
 		["intro1","resources/bg1.png"],
 		["intro2","resources/bg1.png"],
 		["intro3","resources/bg1.png"],
@@ -38,6 +40,7 @@
 		{id:"florida-boss",image:"sprites",tileh:54,tilew:30,tilerow:3,gapx:0,gapy:221},
 		{id:"georgia-dog",image:"sprites2",tileh:19,tilew:34,tilerow:3,gapx:0,gapy:332},
 		{id:"georgia-boss",image:"sprites2",tileh:54,tilew:28,tilerow:3,gapx:0,gapy:278},
+		{id:"petrino-boss",image:"sprites3",tileh:55,tilew:30,tilerow:3,gapx:0,gapy:353},	
 		{id:"tiledfont",image:"font",tileh:8,tilew:8,tilerow:255,gapx:0,gapy:8}
 	],
 	addBundle:[
@@ -49,6 +52,7 @@
 		{file:"resources/bundle-stage3.js"},
 		{file:"resources/bundle-stage3boss.js"},
 		{file:"resources/bundle-stage4.js"},
-		{file:"resources/bundle-stage4boss.js"}
+		{file:"resources/bundle-stage4boss.js"},
+		{file:"resources/bundle-finalstage.js"}	
 	]
 }

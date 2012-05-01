@@ -66,7 +66,7 @@
 			maingame.gameEndingIntroAnimation=function(reset){
 				if (reset) {
 					toys.resetToy(this,"intro-animation");
-					maingame.hud.hideWidgets(["stage","lives","time_left"]); // Hides the timer and the stage label for the ending
+					maingame.hud.hideWidgets(["score","lives","time", "label"]); // Hides the timer and the stage label for the ending
 				} else {
 					gbox.blitFade(gbox.getBufferContext(),{alpha:1});
 					return toys.dialogue.render(this,"intro-animation",dialogues.ending);
@@ -114,6 +114,8 @@
 					scene = "bg4";
 				else if(currentstage == "stage4boss")
 					scene = "bg4Boss";
+				else if(currentstage == "finalstage")
+					scene = "finalstageBG";
 				else
 					scene = "bg";
 				gbox.createCanvas("tileslayer",{w:tilemaps[currentstage].w,h:tilemaps[currentstage].h});
